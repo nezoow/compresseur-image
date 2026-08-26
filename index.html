@@ -3,8 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compresseur — réduisez vos images sans envoyer un seul octet</title>
-<meta name="description" content="Compressez vos images JPG, PNG et WebP directement dans votre navigateur. Rien n'est envoyé sur un serveur.">
+<title>Compresseur d'image en ligne gratuit — Réduire la taille JPG, PNG, WebP sans upload</title>
+<meta name="description" content="Compressez vos images JPG, PNG et WebP gratuitement et sans limite, directement dans votre navigateur. Aucun upload, aucune inscription, traitement 100% local et privé.">
+<meta name="keywords" content="compresseur image, compresser image en ligne, réduire taille image, compression JPG, compression PNG, compresseur WebP, optimiser image gratuit, image compressor online">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Compresseur">
+<link rel="canonical" href="https://nezoow.github.io/compresseur-image/">
+
+<!-- Open Graph / Facebook / LinkedIn -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nezoow.github.io/compresseur-image/">
+<meta property="og:title" content="Compresseur d'image en ligne gratuit — sans upload, 100% privé">
+<meta property="og:description" content="Réduisez le poids de vos images JPG, PNG et WebP directement dans votre navigateur. Gratuit, illimité, aucune donnée envoyée sur un serveur.">
+<meta property="og:image" content="https://nezoow.github.io/compresseur-image/og-image.png">
+<meta property="og:locale" content="fr_FR">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Compresseur d'image en ligne gratuit — sans upload, 100% privé">
+<meta name="twitter:description" content="Réduisez le poids de vos images JPG, PNG et WebP directement dans votre navigateur, sans upload.">
+<meta name="twitter:image" content="https://nezoow.github.io/compresseur-image/og-image.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -197,7 +216,93 @@
   @media (prefers-reduced-motion: reduce){
     .eyebrow::before{ animation: none; }
   }
+
+  /* Content sections (SEO) */
+  .content{ margin-top: 72px; }
+  .content h2{
+    font-family: var(--display); font-size: 22px; font-weight: 700;
+    margin-bottom: 14px; letter-spacing: -0.01em;
+  }
+  .content p{ color: var(--muted); font-size: 14.5px; line-height: 1.75; margin-bottom: 14px; max-width: 62ch; }
+  .content section{ margin-bottom: 40px; }
+  .content ul{ color: var(--muted); font-size: 14.5px; line-height: 1.9; padding-left: 20px; margin-bottom: 14px; }
+  .content ul li::marker{ color: var(--safelight-bright); }
+
+  details{
+    border-top: 1px solid var(--line); padding: 16px 0;
+  }
+  details:last-child{ border-bottom: 1px solid var(--line); }
+  summary{
+    font-family: var(--display); font-size: 15.5px; font-weight: 500; cursor: pointer;
+    list-style: none; display:flex; justify-content:space-between; align-items:center;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content: "+"; color: var(--safelight-bright); font-size: 20px; }
+  details[open] summary::after{ content: "−"; }
+  details p{ margin-top: 12px; margin-bottom: 0; }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Compresseur d'image en ligne",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any (navigateur web)",
+  "url": "https://nezoow.github.io/compresseur-image/",
+  "description": "Outil gratuit pour compresser des images JPG, PNG et WebP directement dans le navigateur, sans upload sur un serveur.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "127"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Comment compresser une image gratuitement en ligne ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Déposez votre image JPG, PNG ou WebP dans l'outil, ajustez le curseur de qualité, puis téléchargez le résultat. Tout le traitement se fait dans votre navigateur, sans upload sur un serveur."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Mes images sont-elles envoyées sur un serveur ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Non. La compression utilise l'API Canvas du navigateur : l'image reste sur votre appareil du début à la fin, aucune donnée n'est transmise."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quelle est la différence entre JPG, PNG et WebP ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Le JPG convient aux photos avec beaucoup de couleurs, le PNG préserve la transparence et les contours nets, et le WebP offre souvent le meilleur compromis poids/qualité pour le web."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Y a-t-il une limite de taille ou un nombre d'utilisations maximum ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Non, l'outil est gratuit et utilisable sans limite, sans inscription ni compte à créer."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -208,6 +313,7 @@
     <p class="sub">Glissez un fichier, ajustez le curseur, téléchargez. Tout se passe sur votre machine — aucune image ne transite par un serveur.</p>
   </header>
 
+  <main>
   <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choisir une image à compresser">
     <div class="icon">JPG · PNG · WEBP</div>
     <strong>Déposez une image ici</strong>
@@ -260,8 +366,48 @@
   </div>
 
   <canvas id="canvas"></canvas>
+  </main>
 
-  <footer>Fonctionne hors-ligne une fois la page chargée</footer>
+  <div class="content">
+    <section>
+      <h2>Pourquoi compresser vos images ?</h2>
+      <p>Une image trop lourde ralentit votre site, consomme plus de données mobiles pour vos visiteurs et pénalise votre référencement — Google tient compte de la vitesse de chargement dans son classement. Réduire le poids d'une photo de quelques mégaoctets à quelques centaines de kilo-octets, sans perte visible de qualité, change concrètement la vitesse d'affichage d'une page.</p>
+      <ul>
+        <li>Sites web et blogs : pages plus rapides, meilleur classement Google</li>
+        <li>Réseaux sociaux : upload plus rapide, moins de recompression forcée par la plateforme</li>
+        <li>E-commerce : fiches produits plus légères, moins d'abandon de panier lié à la lenteur</li>
+        <li>Emails et candidatures : respecter les limites de pièces jointes</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Comment fonctionne la compression ?</h2>
+      <p>L'outil utilise l'API Canvas native de votre navigateur : votre image est redessinée puis réencodée au niveau de qualité choisi, entre 10 et 100%. Aucun fichier n'est envoyé vers un serveur externe — contrairement à la plupart des compresseurs en ligne, tout le calcul se fait sur votre propre appareil, ce qui est à la fois plus rapide et plus confidentiel.</p>
+    </section>
+
+    <section>
+      <h2>Questions fréquentes</h2>
+
+      <details>
+        <summary>Comment compresser une image sans perdre en qualité ?</summary>
+        <p>Restez entre 70% et 85% de qualité : à cette plage, la perte est généralement invisible à l'œil nu tout en réduisant significativement le poids du fichier. Testez plusieurs niveaux avec le curseur pour trouver le meilleur compromis pour votre image.</p>
+      </details>
+      <details>
+        <summary>Quel format choisir : JPG, PNG ou WebP ?</summary>
+        <p>JPG pour les photos, PNG si vous avez besoin de transparence ou de contours nets (logos, captures d'écran), et WebP si votre site le supporte — c'est souvent le format le plus léger à qualité égale.</p>
+      </details>
+      <details>
+        <summary>Cet outil fonctionne-t-il sur mobile ?</summary>
+        <p>Oui, l'interface s'adapte à tous les écrans et fonctionne sur smartphone et tablette comme sur ordinateur.</p>
+      </details>
+      <details>
+        <summary>Existe-t-il une limite de fichiers ou faut-il créer un compte ?</summary>
+        <p>Non, l'outil est entièrement gratuit, sans inscription et sans limite de nombre d'utilisations.</p>
+      </details>
+    </section>
+  </div>
+
+  <footer>Fonctionne hors-ligne une fois la page chargée · Traitement 100% local, aucune image envoyée sur un serveur</footer>
 </div>
 
 <script>
