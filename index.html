@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Compresser une image en ligne gratuit — SizePix</title>
-<meta name="description" content="Compressez, redimensionnez et recadrez vos images JPG, PNG et WebP gratuitement, directement dans votre navigateur. Formats prêts à l'emploi Instagram, YouTube, LinkedIn. Aucun upload, aucune inscription.">
-<meta name="keywords" content="compresseur image, redimensionner image en ligne, recadrer image en ligne, réduire taille image, compression JPG PNG WebP, format instagram story, miniature youtube, optimiser image gratuit">
+<meta name="description" content="Compressez, redimensionnez, recadrez et éditez vos images JPG, PNG et WebP gratuitement, directement dans votre navigateur. Aucun upload, aucune inscription.">
+<meta name="keywords" content="compresseur image, redimensionner image en ligne, recadrer image en ligne, éditeur de photo en ligne, réduire taille image, compression JPG PNG WebP, optimiser image gratuit">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://nezoow.github.io/compresseur-image/">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nezoow.github.io/compresseur-image/">
-<meta property="og:title" content="Compresser, redimensionner, recadrer une image — gratuit, sans upload">
-<meta property="og:description" content="Trois outils pour vos images, directement dans votre navigateur : compression, redimensionnement et recadrage, utilisables séparément. Gratuit, illimité, rien n'est envoyé sur un serveur.">
+<meta property="og:title" content="Compresser, redimensionner, recadrer et éditer une image — gratuit, sans upload">
+<meta property="og:description" content="Quatre outils pour vos images, directement dans votre navigateur : compression, redimensionnement, recadrage et un éditeur complet. Gratuit, illimité, rien n'est envoyé sur un serveur.">
 <meta property="og:image" content="https://nezoow.github.io/compresseur-image/og-image.png">
 <meta property="og:locale" content="fr_FR">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Compresser, redimensionner, recadrer une image — gratuit, sans upload">
-<meta name="twitter:description" content="Trois outils pour vos images, utilisables séparément, directement dans votre navigateur.">
+<meta name="twitter:title" content="Compresser, redimensionner, recadrer et éditer une image — gratuit, sans upload">
+<meta name="twitter:description" content="Quatre outils pour vos images, utilisables séparément, directement dans votre navigateur.">
 <meta name="twitter:image" content="https://nezoow.github.io/compresseur-image/og-image.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,6 +38,7 @@
     --green-bg: #DCFCE7; --green: #16A34A;
     --blue-bg: #DBEAFE; --blue: #2563EB;
     --pink-bg: #FCE7F3; --pink: #DB2777;
+    --amber-bg: #FEF3C7; --amber: #D97706;
     --black: #13151C; --black-hover: #2B2E38;
     --sans: 'Inter', sans-serif;
     --display: 'Poppins', sans-serif;
@@ -61,18 +62,19 @@
   .blob-c{ width:420px; height:420px; background: #FBE4F2; bottom:-180px; right:-160px; }
 
   .wrap{ max-width: 1120px; margin: 0 auto; position: relative; z-index: 1; padding: 0 28px; }
+  .wrap.wide{ max-width: 1320px; }
 
   /* Sticky top nav */
   .topnav{
     position: sticky; top: 0; z-index: 30;
-    background: rgba(242,244,251,0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background: rgba(242,244,251,0.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
   }
   .topnav-inner{
-    max-width: 1120px; margin: 0 auto; padding: 14px 28px;
+    max-width: 1320px; margin: 0 auto; padding: 14px 28px;
     display:flex; align-items:center; justify-content:space-between; gap: 16px; flex-wrap: wrap;
   }
-  .toolnav{ display:flex; gap: 4px; }
+  .toolnav{ display:flex; gap: 4px; flex-wrap: wrap; }
   .toolnav a{
     display:flex; align-items:center; gap: 7px; text-decoration:none; color: var(--ink);
     font-size: 13.5px; font-weight: 600; padding: 9px 13px; border-radius: 10px; transition: background .15s;
@@ -86,10 +88,12 @@
   .toolnav a.active[data-mode="compress"]::after{ background: var(--green); }
   .toolnav a.active[data-mode="resize"]::after{ background: var(--blue); }
   .toolnav a.active[data-mode="crop"]::after{ background: var(--pink); }
+  .toolnav a.active[data-mode="editor"]::after{ background: var(--amber); }
   .toolnav a .dot{ width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
   .toolnav a .dot.green{ background: var(--green); }
   .toolnav a .dot.blue{ background: var(--blue); }
   .toolnav a .dot.pink{ background: var(--pink); }
+  .toolnav a .dot.amber{ background: var(--amber); }
 
   /* Header */
   header{ display:flex; align-items:center; gap:10px; }
@@ -103,7 +107,7 @@
 
   /* Hero */
   .hero{ text-align:center; padding: 50px 0 32px; transition: opacity .16s ease, transform .16s ease; }
-  .hero.fading, .toolcard.fading{ opacity:0; transform: translateY(6px); }
+  .hero.fading, .toolcard.fading, .editorCard.fading{ opacity:0; transform: translateY(6px); }
   h1{
     font-family: var(--display); font-weight: 800; font-size: clamp(32px, 4.4vw, 44px);
     line-height: 1.14; letter-spacing: -0.01em; color: var(--ink); max-width: 18ch; margin: 0 auto;
@@ -113,7 +117,7 @@
     margin-left:auto; margin-right:auto; line-height:1.55;
   }
 
-  /* Tool card */
+  /* Tool card (simple tools) */
   .toolcard{
     background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
     padding: 10px; margin-top: 8px; transition: opacity .16s ease, transform .16s ease;
@@ -137,7 +141,6 @@
   .panel{ display:none; }
   .panel.show{ display:grid; grid-template-columns: 1fr 350px; align-items: start; }
 
-  /* Left: preview pane */
   .previewPane{ padding: 14px; }
   .filebar{
     display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
@@ -174,7 +177,6 @@
   .previewChiprow{ display:flex; flex-wrap:wrap; gap:8px; padding: 14px 2px 0; align-items:center; }
   .previewChiprow .row-label{ font-size:12.5px; color: var(--muted); font-weight:500; margin-right:2px; }
 
-  /* Right: controls sidebar */
   .controlsPane{
     background: var(--card-soft); border-radius: 14px; padding: 6px 0 14px;
     border-left: 1px solid var(--border);
@@ -273,11 +275,106 @@
 
   canvas{ display:none; }
 
-  /* Responsive: stack on narrower screens */
   @media (max-width: 900px){
     .panel.show{ display:block; }
     .controlsPane{ border-left:none; border-top: 1px solid var(--border); margin-top: 14px; border-radius: 14px; }
     .stage img{ max-height: 420px; }
+  }
+
+  /* ===================== PHOTO EDITOR ===================== */
+  .editorCard{
+    display:none; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    overflow:hidden; margin-top: 8px; transition: opacity .16s ease, transform .16s ease;
+  }
+  .editorCard.show{ display:block; }
+
+  .editorCard .dropzone{ margin: 10px; }
+
+  .editorApp{ display:none; }
+  .editorApp.show{ display:block; }
+
+  .etoolbar{
+    display:flex; gap: 2px; padding: 10px 14px; border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .etool{
+    display:flex; flex-direction:column; align-items:center; gap: 5px; padding: 9px 13px;
+    border-radius: 10px; cursor:pointer; color: var(--ink); font-size: 10.5px; font-weight:600;
+    white-space: nowrap; border: 1px solid transparent; background:none; flex-shrink:0; position:relative;
+  }
+  .etool:hover{ background: var(--card-soft); }
+  .etool.active{ background: var(--amber-bg); border-color: var(--amber); color: var(--amber); }
+  .etool.disabled{ opacity: 0.4; cursor:not-allowed; }
+  .etool.disabled:hover{ background:none; }
+  .etool.linkout{ border-right: 1px solid var(--border); border-radius: 10px 0 0 10px; }
+  .etool svg{ width:19px; height:19px; stroke: currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .esep{ width:1px; background: var(--border); margin: 6px 8px; flex-shrink:0; }
+  .esoon{
+    position:absolute; top:2px; right:2px; font-size: 7.5px; font-weight:700; letter-spacing:.02em;
+    background: var(--border); color: var(--muted); padding: 1px 4px; border-radius: 5px;
+  }
+
+  .ebody{ display:grid; grid-template-columns: 1fr 300px; min-height: 520px; }
+  .ecanvasArea{
+    background-image: linear-gradient(45deg, #eceef5 25%, transparent 25%), linear-gradient(-45deg, #eceef5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #eceef5 75%), linear-gradient(-45deg, transparent 75%, #eceef5 75%);
+    background-size: 18px 18px; background-position: 0 0, 0 9px, 9px -9px, -9px 0px;
+    display:flex; align-items:center; justify-content:center; padding: 26px; overflow:auto;
+  }
+  #editorCanvas{ display:block; max-width:100%; max-height:520px; width:auto; height:auto; box-shadow: 0 6px 24px rgba(19,21,28,0.18); border-radius: 2px; transform-origin: center center; background:#fff; }
+  #editorCanvas.tool-draw{ cursor: crosshair; }
+  #editorCanvas.tool-text{ cursor: default; }
+
+  .esidebar{ border-left: 1px solid var(--border); display:flex; flex-direction:column; }
+  .ezoomrow{
+    display:flex; align-items:center; justify-content:center; gap: 14px;
+    padding: 16px 14px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight:600;
+  }
+  .iconbtn{
+    width: 32px; height:32px; border-radius:50%; background: var(--card-soft); border: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; color: var(--ink); flex-shrink:0;
+  }
+  .iconbtn:disabled{ opacity:0.35; cursor:not-allowed; }
+  .iconbtn svg{ width:15px; height:15px; stroke: currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .ehistrow{ display:flex; justify-content:center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+
+  .etool-options{ flex:1; padding: 16px 18px; overflow-y:auto; }
+  .eopt-title{ font-size: 12px; font-weight:700; color: var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom: 14px; }
+  .eopt-field{ margin-bottom: 18px; }
+  .eopt-field label{ display:flex; justify-content:space-between; font-size: 13px; font-weight:600; margin-bottom: 9px; }
+  .eopt-field label b{ color: var(--amber); font-variant-numeric: tabular-nums; }
+  .ecolorsize{ display:flex; align-items:center; gap: 10px; margin-bottom: 14px; }
+  .ecolorsize input[type=color]{ width:38px; height:38px; border-radius:10px; border:1.5px solid var(--border); padding:2px; cursor:pointer; background:var(--card); }
+  .ecolorsize input[type=range]{ flex:1; }
+  .etextinput{
+    width:100%; background: var(--card); border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: var(--sans); font-size: 14px; padding: 10px 12px; color: var(--ink); margin-bottom: 14px;
+  }
+  .etextinput:focus{ outline:none; border-color: var(--amber); }
+  .etransform-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .exbtn{
+    display:flex; flex-direction:column; align-items:center; gap:7px; padding: 14px 8px;
+    background: var(--card-soft); border: 1.5px solid var(--border); border-radius: 12px; cursor:pointer;
+    font-size: 11.5px; font-weight:600; color: var(--ink);
+  }
+  .exbtn:hover{ border-color: var(--amber); }
+  .exbtn svg{ width:20px; height:20px; stroke: currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .esmallghost{
+    width:100%; padding: 11px; background: var(--card); border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: var(--sans); font-weight:600; font-size: 12.5px; color: var(--ink); cursor:pointer; margin-top: 4px;
+  }
+  .esmallghost:hover{ border-color: var(--muted-2); }
+  .esmallghost.danger{ color: var(--pink); }
+  .esmallghost.accent{ background: var(--amber); border-color: var(--amber); color:#fff; }
+
+  .esave{ padding: 16px 18px; border-top: 1px solid var(--border); }
+  .esave .format-row{ padding: 0 0 14px; }
+  .esave .format-btn{ padding: 9px 4px; }
+  .eoutsize{ font-size: 12px; color: var(--muted); text-align:center; margin-bottom: 12px; }
+
+  @media (max-width: 900px){
+    .ebody{ display:block; }
+    .esidebar{ border-left:none; border-top: 1px solid var(--border); }
+    .ecanvasArea{ min-height: 340px; }
   }
 
   /* Content */
@@ -317,46 +414,13 @@
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "Compresseur, redimensionneur et recadreur d'image en ligne",
+  "name": "SizePix — compresseur, redimensionneur, recadreur et éditeur d'image en ligne",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "Any (navigateur web)",
   "url": "https://nezoow.github.io/compresseur-image/",
-  "description": "Trois outils gratuits pour compresser, redimensionner ou recadrer des images JPG, PNG et WebP directement dans le navigateur, utilisables séparément, sans upload sur un serveur.",
+  "description": "Outils gratuits pour compresser, redimensionner, recadrer et éditer des images JPG, PNG et WebP directement dans le navigateur, sans upload sur un serveur.",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
   "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "127" }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Comment compresser une image gratuitement en ligne ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Choisissez l'outil Compression, déposez votre image JPG, PNG ou WebP, ajustez le curseur de qualité, puis téléchargez le résultat. Tout se passe dans votre navigateur, sans upload sur un serveur." }
-    },
-    {
-      "@type": "Question",
-      "name": "Comment redimensionner une image sans la déformer ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Dans l'outil Redimensionnement, gardez le cadenas de proportion activé : en changeant la largeur, la hauteur s'ajuste automatiquement pour éviter toute déformation." }
-    },
-    {
-      "@type": "Question",
-      "name": "Comment recadrer une image en ligne ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Dans l'outil Recadrage, faites glisser le cadre rose directement sur l'aperçu, ou tirez ses coins pour l'agrandir. Des ratios rapides (carré, story, 16:9) sont aussi proposés." }
-    },
-    {
-      "@type": "Question",
-      "name": "Pourquoi les trois outils sont-ils séparés ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Pour rester simple : chaque outil applique un seul traitement à la fois, sans réglages cachés qui s'additionnent. Vous savez toujours exactement ce que vous appliquez à votre image." }
-    },
-    {
-      "@type": "Question",
-      "name": "Mes images sont-elles envoyées sur un serveur ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Non. Le traitement utilise l'API Canvas du navigateur : l'image reste sur votre appareil du début à la fin." }
-    }
-  ]
 }
 </script>
 </head>
@@ -375,16 +439,18 @@
         <a href="#compress-section" data-mode="compress" class="active"><span class="dot green"></span>Compression</a>
         <a href="#resize-section" data-mode="resize"><span class="dot blue"></span>Redimensionnement</a>
         <a href="#crop-section" data-mode="crop"><span class="dot pink"></span>Recadrage</a>
+        <a href="#editor-section" data-mode="editor"><span class="dot amber"></span>Éditeur de photos</a>
       </nav>
     </div>
   </div>
 
-  <div class="wrap">
+  <div class="wrap" id="mainWrap">
     <div class="hero" id="hero">
       <h1 id="heroTitle">Compressez vos images</h1>
       <p class="sub" id="heroSub">Réduisez le poids d'un JPG, PNG ou WebP sans toucher à ses dimensions. Gratuit, illimité, sans upload.</p>
     </div>
 
+    <!-- ===================== SIMPLE TOOLS (compress / resize / crop) ===================== -->
     <main class="toolcard" id="toolcard" data-mode="compress">
       <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choisir une image à traiter">
         <div class="dzicon"><svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-5 5M12 4l5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
@@ -394,7 +460,6 @@
       </div>
 
       <div class="panel" id="panel">
-        <!-- LEFT: preview -->
         <div class="previewPane">
           <div class="filebar">
             <span class="fname" id="fileName">—</span>
@@ -423,7 +488,6 @@
           </div>
         </div>
 
-        <!-- RIGHT: controls -->
         <div class="controlsPane">
           <div class="mode-block active" data-mode="compress">
             <div class="mode-title"><span class="midot green"></span>Compression</div>
@@ -499,15 +563,125 @@
       <canvas id="canvas"></canvas>
     </main>
 
+    <!-- ===================== PHOTO EDITOR ===================== -->
+    <div class="editorCard" id="editorCard">
+      <div class="dropzone" id="eDropzone" tabindex="0" role="button" aria-label="Choisir une image à éditer">
+        <div class="dzicon"><svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-5 5M12 4l5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
+        <strong>Déposez une image ici</strong>
+        <p>JPG, PNG ou WebP — ou cliquez pour parcourir</p>
+        <input type="file" id="eFileInput" accept="image/png, image/jpeg, image/webp">
+      </div>
+
+      <div class="editorApp" id="editorApp">
+        <div class="etoolbar">
+          <button class="etool active" id="etool-adjust" data-etool="adjust">
+            <svg viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            Filtre et lumière
+          </button>
+          <button class="etool" id="etool-resize" data-etool="_resize">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            Redimensionner
+          </button>
+          <button class="etool" id="etool-crop" data-etool="_crop">
+            <svg viewBox="0 0 24 24"><path d="M6 2v14a2 2 0 0 0 2 2h14M18 22V8a2 2 0 0 0-2-2H2"/></svg>
+            Recadrer
+          </button>
+          <button class="etool" id="etool-transform" data-etool="transform">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            Transformer
+          </button>
+          <div class="esep"></div>
+          <button class="etool" id="etool-draw" data-etool="draw">
+            <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+            Dessiner
+          </button>
+          <button class="etool" id="etool-text" data-etool="text">
+            <svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+            Texte
+          </button>
+          <button class="etool disabled" title="Bientôt disponible">
+            <span class="esoon">Bientôt</span>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+            Formes
+          </button>
+          <button class="etool disabled" title="Bientôt disponible">
+            <span class="esoon">Bientôt</span>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            Stickers
+          </button>
+          <button class="etool disabled" title="Bientôt disponible">
+            <span class="esoon">Bientôt</span>
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            Cadre
+          </button>
+          <div class="esep"></div>
+          <button class="etool disabled" title="Bientôt disponible">
+            <span class="esoon">Bientôt</span>
+            <svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+            Arrière-plan
+          </button>
+          <button class="etool disabled" title="Bientôt disponible">
+            <span class="esoon">Bientôt</span>
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Fusionner
+          </button>
+        </div>
+
+        <div class="ebody">
+          <div class="ecanvasArea">
+            <canvas id="editorCanvas"></canvas>
+          </div>
+
+          <div class="esidebar">
+            <div class="ezoomrow">
+              <button class="iconbtn" id="eZoomOut" aria-label="Zoom arrière">
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <span id="eZoomLabel">Zoom 100%</span>
+              <button class="iconbtn" id="eZoomIn" aria-label="Zoom avant">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+            <div class="ehistrow">
+              <button class="iconbtn" id="eUndoBtn" disabled aria-label="Annuler">
+                <svg viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>
+              </button>
+              <button class="iconbtn" id="eRedoBtn" disabled aria-label="Rétablir">
+                <svg viewBox="0 0 24 24"><polyline points="15 14 20 9 15 4"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg>
+              </button>
+              <button class="iconbtn" id="eResetBtn" aria-label="Réinitialiser toutes les modifications" title="Réinitialiser">
+                <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              </button>
+            </div>
+
+            <div class="etool-options" id="eOptionsPane"><!-- injected by JS --></div>
+
+            <div class="esave">
+              <div class="field-label" style="margin-bottom:10px;">Format de sortie</div>
+              <div class="format-row" id="eFormatRow">
+                <button class="format-btn active" data-eformat="image/jpeg">JPEG</button>
+                <button class="format-btn" data-eformat="image/webp">WEBP</button>
+                <button class="format-btn" data-eformat="image/png">PNG</button>
+              </div>
+              <div class="eoutsize" id="eOutSize">—</div>
+              <button class="primary" id="eSaveBtn" style="width:100%;">Enregistrer</button>
+              <button class="esmallghost" id="eOpenAnother">Ouvrir une autre image</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="content">
       <div class="content-grid">
         <section>
-          <h2>Trois outils séparés, un seul traitement à la fois</h2>
-          <p>Contrairement à un éditeur qui combine tout en même temps, chaque outil ici fait une seule chose, clairement : vous savez exactement ce que vous appliquez à votre image.</p>
+          <h2>Quatre outils, un seul site</h2>
+          <p>Les trois premiers outils font une seule chose chacun, clairement. L'éditeur de photos, lui, permet de combiner plusieurs retouches (lumière, rotation, dessin, texte) dans un seul espace de travail.</p>
           <ul>
             <li><strong>Compression :</strong> réduit le poids, dimensions inchangées</li>
             <li><strong>Redimensionnement :</strong> largeur et hauteur précises, en pixels</li>
             <li><strong>Recadrage :</strong> zone exacte à garder, sans changer la qualité</li>
+            <li><strong>Éditeur de photos :</strong> ajustements, rotation, dessin, texte</li>
           </ul>
         </section>
         <section>
@@ -521,8 +695,12 @@
         <h2 class="faq-title">Questions fréquentes</h2>
         <div class="faq-grid">
           <details>
-            <summary>Pourquoi les trois outils sont-ils séparés ?</summary>
-            <p>Pour rester simple : chaque outil applique un seul traitement à la fois, sans réglages cachés qui s'additionnent.</p>
+            <summary>Que peut faire l'éditeur de photos ?</summary>
+            <p>Ajuster la luminosité/contraste/saturation, faire pivoter ou retourner l'image, dessiner à main levée et ajouter du texte — le tout dans un seul espace de travail avec annuler/rétablir.</p>
+          </details>
+          <details>
+            <summary>Pourquoi certains outils sont-ils "Bientôt disponible" ?</summary>
+            <p>Les stickers, cadres, la suppression d'arrière-plan et la fusion demandent des bibliothèques d'images ou de l'intelligence artificielle. Plutôt que de simuler ces fonctions, on préfère être honnête : elles arriveront plus tard.</p>
           </details>
           <details>
             <summary>Comment recadrer une image en ligne ?</summary>
@@ -531,10 +709,6 @@
           <details>
             <summary>Comment redimensionner sans déformer ?</summary>
             <p>Laissez le cadenas activé : la proportion d'origine est conservée automatiquement.</p>
-          </details>
-          <details>
-            <summary>Quel format choisir ?</summary>
-            <p>JPG pour les photos, PNG pour la transparence, WebP pour le meilleur compromis poids/qualité.</p>
           </details>
           <details>
             <summary>Mes images sont-elles envoyées sur un serveur ?</summary>
@@ -553,6 +727,9 @@
 
 <script>
 (function(){
+  /* ============================================================
+     SIMPLE TOOLS (compress / resize / crop) — unchanged logic
+     ============================================================ */
   const dropzone = document.getElementById('dropzone');
   const fileInput = document.getElementById('fileInput');
   const panel = document.getElementById('panel');
@@ -575,8 +752,8 @@
   const sizeNew = document.getElementById('sizeNew');
   const meterFill = document.getElementById('meterFill');
   const meterVal = document.getElementById('meterVal');
-  const formatBtns = document.querySelectorAll('.format-btn');
-  const ratioChips = document.querySelectorAll('[data-ratio]');
+  const formatBtns = document.querySelectorAll('.format-block .format-btn');
+  const ratioChips = document.querySelectorAll('#cropChips [data-ratio]');
   const presetChips = document.querySelectorAll('[data-preset]');
   const navLinks = document.querySelectorAll('.toolnav a');
   const modeBlocks = document.querySelectorAll('.mode-block');
@@ -584,6 +761,7 @@
   const heroTitle = document.getElementById('heroTitle');
   const heroSub = document.getElementById('heroSub');
   const toolcard = document.getElementById('toolcard');
+  const editorCard = document.getElementById('editorCard');
 
   const MODE_INFO = {
     compress: {
@@ -600,6 +778,11 @@
       pageTitle: "Recadrer une image en ligne gratuit — SizePix",
       h1: "Recadrez vos images",
       sub: "Choisissez la zone exacte à garder, avec des ratios prêts à l'emploi. Gratuit, illimité, sans upload."
+    },
+    editor: {
+      pageTitle: "Éditeur de photos en ligne gratuit — SizePix",
+      h1: "Éditez vos photos",
+      sub: "Lumière, rotation, dessin, texte — un espace de travail complet, gratuit et sans upload."
     }
   };
 
@@ -633,10 +816,18 @@
     document.title = info.pageTitle;
     heroTitle.textContent = info.h1;
     heroSub.textContent = info.sub;
-    modeBlocks.forEach(b => b.classList.toggle('active', b.dataset.mode === m));
     navLinks.forEach(a => a.classList.toggle('active', a.dataset.mode === m));
-    toolcard.dataset.mode = m;
-    cropChips.style.display = (m === 'crop') ? 'flex' : 'none';
+
+    if(m === 'editor'){
+      toolcard.style.display = 'none';
+      editorCard.classList.add('show');
+    } else {
+      toolcard.style.display = '';
+      editorCard.classList.remove('show');
+      modeBlocks.forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+      toolcard.dataset.mode = m;
+      cropChips.style.display = (m === 'crop') ? 'flex' : 'none';
+    }
   }
 
   function setMode(m, opts){
@@ -651,6 +842,7 @@
 
     hero.classList.add('fading');
     toolcard.classList.add('fading');
+    editorCard.classList.add('fading');
 
     window.setTimeout(() => {
       mode = m;
@@ -660,8 +852,10 @@
       }
       hero.classList.remove('fading');
       toolcard.classList.remove('fading');
+      editorCard.classList.remove('fading');
       if(m === 'crop' && img){ requestAnimationFrame(() => { computeScale(); renderCropwin(); }); }
-      if(img) doExport();
+      if(m !== 'editor' && img) doExport();
+      if(m === 'editor' && eImg){ requestAnimationFrame(eFitAndRedraw); }
     }, 150);
   }
 
@@ -669,11 +863,12 @@
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const m = a.dataset.mode;
-      const wasVisible = panel.classList.contains('show');
+      const target = m === 'editor' ? editorCard : dropzone;
+      const wasVisible = m === 'editor' ? editorApp.classList.contains('show') : panel.classList.contains('show');
       setMode(m);
       window.setTimeout(() => {
-        if(!wasVisible) dropzone.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        else toolcard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const el = (m === 'editor') ? (wasVisible ? editorCard : editorCard) : (wasVisible ? toolcard : dropzone);
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 160);
     });
   });
@@ -688,7 +883,7 @@
     setMode(MODE_INFO[m] ? m : 'compress', { firstLoad: true });
   })();
 
-  // ---------- File loading ----------
+  // ---------- File loading (simple tools) ----------
   function openFile(f){
     if(!f || !f.type.startsWith('image/')) return;
     file = f;
@@ -728,7 +923,6 @@
     cropwin.style.height = (crop.h*scale) + 'px';
   }
 
-  // ---------- Crop mode: ratio chips ----------
   function applyRatioPreset(ratio){
     activeRatio = ratio;
     if(ratio > 0){
@@ -748,7 +942,6 @@
     });
   });
 
-  // ---------- Crop mode: drag / resize ----------
   function pointerPos(e){ return { x: e.clientX, y: e.clientY }; }
   cropwin.addEventListener('pointerdown', (e) => {
     if(mode !== 'crop') return;
@@ -795,12 +988,10 @@
     doExport();
   }));
   window.addEventListener('resize', () => {
-    if(!img) return;
-    computeScale();
-    renderCropwin();
+    if(img && mode !== 'editor'){ computeScale(); renderCropwin(); }
+    if(eImg && mode === 'editor'){ eFitAndRedraw(); }
   });
 
-  // ---------- Resize mode: presets + fields ----------
   presetChips.forEach(chip => {
     chip.addEventListener('click', () => {
       const [w, h, r] = chip.dataset.preset.split(',').map(Number);
@@ -833,13 +1024,11 @@
     lockBtn.classList.toggle('active', lockAspect);
   });
 
-  // ---------- Compress mode ----------
   qualitySlider.addEventListener('input', () => {
     qualityVal.textContent = qualitySlider.value + '%';
     doExport();
   });
 
-  // ---------- Format ----------
   formatBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       formatBtns.forEach(b => b.classList.remove('active'));
@@ -849,7 +1038,6 @@
     });
   });
 
-  // ---------- Export ----------
   function doExport(){
     if(!img) return;
     let sx, sy, sw, sh, outW, outH, quality;
@@ -901,7 +1089,6 @@
     }
   }
 
-  // ---------- Dropzone ----------
   dropzone.addEventListener('click', () => fileInput.click());
   dropzone.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') fileInput.click(); });
   fileInput.addEventListener('change', (e) => openFile(e.target.files[0]));
@@ -925,6 +1112,364 @@
     fileInput.value = '';
     downloadBtn.disabled = true;
   });
+
+  /* ============================================================
+     PHOTO EDITOR
+     ============================================================ */
+  const eDropzone = document.getElementById('eDropzone');
+  const eFileInput = document.getElementById('eFileInput');
+  const editorApp = document.getElementById('editorApp');
+  const editorCanvas = document.getElementById('editorCanvas');
+  const ectx = editorCanvas.getContext('2d');
+  const eOptionsPane = document.getElementById('eOptionsPane');
+  const eZoomLabel = document.getElementById('eZoomLabel');
+  const eZoomIn = document.getElementById('eZoomIn');
+  const eZoomOut = document.getElementById('eZoomOut');
+  const eUndoBtn = document.getElementById('eUndoBtn');
+  const eRedoBtn = document.getElementById('eRedoBtn');
+  const eResetBtn = document.getElementById('eResetBtn');
+  const eFormatBtns = document.querySelectorAll('#eFormatRow .format-btn');
+  const eOutSize = document.getElementById('eOutSize');
+  const eSaveBtn = document.getElementById('eSaveBtn');
+  const eOpenAnother = document.getElementById('eOpenAnother');
+  const eToolButtons = document.querySelectorAll('.etool[data-etool]');
+  const ecanvasArea = document.querySelector('.ecanvasArea');
+
+  let eImg = null, eFile = null, eNaturalW = 0, eNaturalH = 0;
+  let eAdjust = { brightness: 100, contrast: 100, saturate: 100 };
+  let eTransform = { rotate: 0, flipH: false, flipV: false };
+  let eDraws = [];
+  let eTexts = [];
+  let eSelectedText = null;
+  let eTool = 'adjust';
+  let eDrawColor = '#13151C', eDrawSize = 6;
+  let eTextColor = '#13151C', eTextSize = 40;
+  let eZoom = 100;
+  let eFitScale = 1;
+  let eHistory = [], eHistoryIndex = -1;
+  let eFormat = 'image/jpeg';
+  let eDrawing = false, eDragText = false, eDragOffset = null;
+
+  function eOpenFile(f){
+    if(!f || !f.type.startsWith('image/')) return;
+    eFile = f;
+    const url = URL.createObjectURL(f);
+    const im = new Image();
+    im.onload = () => {
+      eImg = im;
+      eNaturalW = im.naturalWidth;
+      eNaturalH = im.naturalHeight;
+      eAdjust = { brightness: 100, contrast: 100, saturate: 100 };
+      eTransform = { rotate: 0, flipH: false, flipV: false };
+      eDraws = []; eTexts = []; eSelectedText = null; eZoom = 100;
+      eHistory = []; eHistoryIndex = -1;
+      eDropzone.style.display = 'none';
+      editorApp.classList.add('show');
+      setETool('adjust');
+      requestAnimationFrame(() => {
+        eFitAndRedraw();
+        ePushHistory();
+      });
+    };
+    im.src = url;
+  }
+
+  function eCanvasSize(){
+    const swapped = (eTransform.rotate % 180) !== 0;
+    return swapped ? { w: eNaturalH, h: eNaturalW } : { w: eNaturalW, h: eNaturalH };
+  }
+
+  function eFitAndRedraw(){
+    if(!eImg) return;
+    const size = eCanvasSize();
+    editorCanvas.width = size.w;
+    editorCanvas.height = size.h;
+    eRedraw();
+    eApplyZoomStyle();
+  }
+
+  function eApplyZoomStyle(){
+    editorCanvas.style.transform = 'scale(' + (eZoom / 100) + ')';
+    eZoomLabel.textContent = 'Zoom ' + Math.round(eZoom) + '%';
+  }
+
+  function eRedraw(){
+    if(!eImg) return;
+    const w = editorCanvas.width, h = editorCanvas.height;
+    ectx.save();
+    ectx.clearRect(0, 0, w, h);
+    ectx.filter = `brightness(${eAdjust.brightness}%) contrast(${eAdjust.contrast}%) saturate(${eAdjust.saturate}%)`;
+    ectx.translate(w / 2, h / 2);
+    ectx.rotate(eTransform.rotate * Math.PI / 180);
+    ectx.scale(eTransform.flipH ? -1 : 1, eTransform.flipV ? -1 : 1);
+    ectx.drawImage(eImg, -eNaturalW / 2, -eNaturalH / 2, eNaturalW, eNaturalH);
+    ectx.restore();
+    ectx.filter = 'none';
+
+    eDraws.forEach(p => {
+      ectx.strokeStyle = p.color; ectx.lineWidth = p.size;
+      ectx.lineCap = 'round'; ectx.lineJoin = 'round';
+      ectx.beginPath();
+      p.points.forEach((pt, i) => i === 0 ? ectx.moveTo(pt.x, pt.y) : ectx.lineTo(pt.x, pt.y));
+      ectx.stroke();
+    });
+
+    eTexts.forEach((t, i) => {
+      ectx.font = `700 ${t.size}px Poppins, sans-serif`;
+      ectx.fillStyle = t.color;
+      ectx.textBaseline = 'top';
+      ectx.fillText(t.text, t.x, t.y);
+      if(i === eSelectedText){
+        const tw = ectx.measureText(t.text).width;
+        ectx.save();
+        ectx.strokeStyle = '#D97706'; ectx.setLineDash([5, 4]); ectx.lineWidth = 1.5;
+        ectx.strokeRect(t.x - 6, t.y - 6, tw + 12, t.size * 1.15 + 12);
+        ectx.restore();
+      }
+    });
+
+    eUpdateOutSize();
+  }
+
+  function eUpdateOutSize(){
+    eOutSize.textContent = `${editorCanvas.width}×${editorCanvas.height}px`;
+  }
+
+  function ePushHistory(){
+    const snap = JSON.stringify({ adjust: eAdjust, transform: eTransform, draws: eDraws, texts: eTexts });
+    eHistory = eHistory.slice(0, eHistoryIndex + 1);
+    eHistory.push(snap);
+    if(eHistory.length > 40) eHistory.shift(); else eHistoryIndex++;
+    eHistoryIndex = eHistory.length - 1;
+    eUpdateHistButtons();
+  }
+  function eRestore(json){
+    const s = JSON.parse(json);
+    eAdjust = s.adjust; eTransform = s.transform; eDraws = s.draws; eTexts = s.texts;
+    eSelectedText = null;
+    eFitAndRedraw();
+    eSyncAdjustInputs();
+    eUpdateHistButtons();
+  }
+  function eUndo(){ if(eHistoryIndex <= 0) return; eHistoryIndex--; eRestore(eHistory[eHistoryIndex]); }
+  function eRedo(){ if(eHistoryIndex >= eHistory.length - 1) return; eHistoryIndex++; eRestore(eHistory[eHistoryIndex]); }
+  function eUpdateHistButtons(){
+    eUndoBtn.disabled = eHistoryIndex <= 0;
+    eRedoBtn.disabled = eHistoryIndex >= eHistory.length - 1;
+  }
+  eUndoBtn.addEventListener('click', eUndo);
+  eRedoBtn.addEventListener('click', eRedo);
+  eResetBtn.addEventListener('click', () => {
+    eAdjust = { brightness: 100, contrast: 100, saturate: 100 };
+    eTransform = { rotate: 0, flipH: false, flipV: false };
+    eDraws = []; eTexts = []; eSelectedText = null;
+    eFitAndRedraw();
+    eSyncAdjustInputs();
+    ePushHistory();
+  });
+
+  eZoomIn.addEventListener('click', () => { eZoom = Math.min(200, eZoom + 25); eApplyZoomStyle(); });
+  eZoomOut.addEventListener('click', () => { eZoom = Math.max(25, eZoom - 25); eApplyZoomStyle(); });
+
+  // ---------- Toolbar switching ----------
+  function setETool(t){
+    if(t === '_resize'){ setMode('resize'); return; }
+    if(t === '_crop'){ setMode('crop'); return; }
+    eTool = t;
+    eToolButtons.forEach(b => b.classList.toggle('active', b.dataset.etool === t));
+    editorCanvas.classList.toggle('tool-draw', t === 'draw');
+    editorCanvas.classList.toggle('tool-text', t === 'text');
+    eRenderOptions();
+  }
+  eToolButtons.forEach(b => b.addEventListener('click', () => setETool(b.dataset.etool)));
+
+  function eRenderOptions(){
+    if(eTool === 'adjust'){
+      eOptionsPane.innerHTML = `
+        <div class="eopt-title">Filtre et lumière</div>
+        <div class="eopt-field">
+          <label>Luminosité <b id="eBrightVal">100%</b></label>
+          <input type="range" id="eBright" min="50" max="150" value="${eAdjust.brightness}">
+        </div>
+        <div class="eopt-field">
+          <label>Contraste <b id="eContrastVal">100%</b></label>
+          <input type="range" id="eContrast" min="50" max="150" value="${eAdjust.contrast}">
+        </div>
+        <div class="eopt-field">
+          <label>Saturation <b id="eSaturateVal">100%</b></label>
+          <input type="range" id="eSaturate" min="0" max="200" value="${eAdjust.saturate}">
+        </div>
+        <button class="esmallghost" id="eAdjustReset">Réinitialiser les réglages</button>
+      `;
+      const b = document.getElementById('eBright'), c = document.getElementById('eContrast'), s = document.getElementById('eSaturate');
+      const bv = document.getElementById('eBrightVal'), cv = document.getElementById('eContrastVal'), sv = document.getElementById('eSaturateVal');
+      bv.textContent = eAdjust.brightness + '%'; cv.textContent = eAdjust.contrast + '%'; sv.textContent = eAdjust.saturate + '%';
+      b.addEventListener('input', () => { eAdjust.brightness = +b.value; bv.textContent = b.value + '%'; eRedraw(); });
+      c.addEventListener('input', () => { eAdjust.contrast = +c.value; cv.textContent = c.value + '%'; eRedraw(); });
+      s.addEventListener('input', () => { eAdjust.saturate = +s.value; sv.textContent = s.value + '%'; eRedraw(); });
+      [b, c, s].forEach(el => el.addEventListener('change', ePushHistory));
+      document.getElementById('eAdjustReset').addEventListener('click', () => {
+        eAdjust = { brightness: 100, contrast: 100, saturate: 100 };
+        eRedraw(); eSyncAdjustInputs(); ePushHistory();
+      });
+    }
+
+    else if(eTool === 'transform'){
+      eOptionsPane.innerHTML = `
+        <div class="eopt-title">Transformer</div>
+        <div class="etransform-grid">
+          <button class="exbtn" id="eRotL"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>Rotation −90°</button>
+          <button class="exbtn" id="eRotR"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg>Rotation +90°</button>
+          <button class="exbtn" id="eFlipH"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M17 8l3 4-3 4"/><path d="M7 8l-3 4 3 4"/></svg>Miroir horizontal</button>
+          <button class="exbtn" id="eFlipV"><svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M8 7l4-3 4 3"/><path d="M8 17l4 3 4-3"/></svg>Miroir vertical</button>
+        </div>
+      `;
+      document.getElementById('eRotL').addEventListener('click', () => { eTransform.rotate = (eTransform.rotate - 90 + 360) % 360; eFitAndRedraw(); ePushHistory(); });
+      document.getElementById('eRotR').addEventListener('click', () => { eTransform.rotate = (eTransform.rotate + 90) % 360; eFitAndRedraw(); ePushHistory(); });
+      document.getElementById('eFlipH').addEventListener('click', () => { eTransform.flipH = !eTransform.flipH; eRedraw(); ePushHistory(); });
+      document.getElementById('eFlipV').addEventListener('click', () => { eTransform.flipV = !eTransform.flipV; eRedraw(); ePushHistory(); });
+    }
+
+    else if(eTool === 'draw'){
+      eOptionsPane.innerHTML = `
+        <div class="eopt-title">Dessiner</div>
+        <div class="ecolorsize">
+          <input type="color" id="eDrawColorInput" value="${eDrawColor}">
+          <input type="range" id="eDrawSizeInput" min="1" max="40" value="${eDrawSize}">
+        </div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px;">Cliquez-glissez directement sur l'image pour dessiner.</p>
+        <button class="esmallghost danger" id="eClearDraw">Effacer le dessin</button>
+      `;
+      document.getElementById('eDrawColorInput').addEventListener('input', (e) => eDrawColor = e.target.value);
+      document.getElementById('eDrawSizeInput').addEventListener('input', (e) => eDrawSize = +e.target.value);
+      document.getElementById('eClearDraw').addEventListener('click', () => { eDraws = []; eRedraw(); ePushHistory(); });
+    }
+
+    else if(eTool === 'text'){
+      const sel = eSelectedText !== null ? eTexts[eSelectedText] : null;
+      eOptionsPane.innerHTML = `
+        <div class="eopt-title">Texte</div>
+        <button class="esmallghost accent" id="eAddText" style="margin-bottom:16px;">+ Ajouter un texte</button>
+        ${sel ? `
+          <input type="text" class="etextinput" id="eTextContent" value="${sel.text.replace(/"/g,'&quot;')}">
+          <div class="ecolorsize">
+            <input type="color" id="eTextColorInput" value="${sel.color}">
+            <input type="range" id="eTextSizeInput" min="12" max="140" value="${sel.size}">
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Glissez le texte sur l'image pour le déplacer.</p>
+          <button class="esmallghost danger" id="eDeleteText">Supprimer ce texte</button>
+        ` : `<p style="font-size:12.5px;color:var(--muted);">Ajoutez un texte, puis faites-le glisser sur l'image.</p>`}
+      `;
+      document.getElementById('eAddText').addEventListener('click', () => {
+        const t = { x: editorCanvas.width/2 - 80, y: editorCanvas.height/2 - 20, text: 'Votre texte', color: eTextColor, size: eTextSize };
+        eTexts.push(t);
+        eSelectedText = eTexts.length - 1;
+        eRedraw(); eRenderOptions(); ePushHistory();
+      });
+      if(sel){
+        document.getElementById('eTextContent').addEventListener('input', (e) => { sel.text = e.target.value; eRedraw(); });
+        document.getElementById('eTextContent').addEventListener('change', ePushHistory);
+        document.getElementById('eTextColorInput').addEventListener('input', (e) => { sel.color = e.target.value; eTextColor = e.target.value; eRedraw(); });
+        document.getElementById('eTextColorInput').addEventListener('change', ePushHistory);
+        document.getElementById('eTextSizeInput').addEventListener('input', (e) => { sel.size = +e.target.value; eTextSize = +e.target.value; eRedraw(); });
+        document.getElementById('eTextSizeInput').addEventListener('change', ePushHistory);
+        document.getElementById('eDeleteText').addEventListener('click', () => {
+          eTexts.splice(eSelectedText, 1); eSelectedText = null;
+          eRedraw(); eRenderOptions(); ePushHistory();
+        });
+      }
+    }
+  }
+
+  function eSyncAdjustInputs(){ if(eTool === 'adjust') eRenderOptions(); }
+
+  // ---------- Canvas coordinate mapping ----------
+  function eCanvasPoint(e){
+    const rect = editorCanvas.getBoundingClientRect();
+    const sx = editorCanvas.width / rect.width;
+    const sy = editorCanvas.height / rect.height;
+    return { x: (e.clientX - rect.left) * sx, y: (e.clientY - rect.top) * sy };
+  }
+  function eHitText(pt){
+    for(let i = eTexts.length - 1; i >= 0; i--){
+      const t = eTexts[i];
+      ectx.font = `700 ${t.size}px Poppins, sans-serif`;
+      const w = ectx.measureText(t.text).width;
+      if(pt.x >= t.x - 6 && pt.x <= t.x + w + 6 && pt.y >= t.y - 6 && pt.y <= t.y + t.size * 1.15 + 6) return i;
+    }
+    return null;
+  }
+
+  editorCanvas.addEventListener('pointerdown', (e) => {
+    if(!eImg) return;
+    const pt = eCanvasPoint(e);
+    if(eTool === 'draw'){
+      eDrawing = true;
+      eDraws.push({ points: [pt], color: eDrawColor, size: eDrawSize });
+      editorCanvas.setPointerCapture(e.pointerId);
+    } else if(eTool === 'text'){
+      const hit = eHitText(pt);
+      if(hit !== null){
+        eSelectedText = hit; eDragText = true;
+        eDragOffset = { x: pt.x - eTexts[hit].x, y: pt.y - eTexts[hit].y };
+        editorCanvas.setPointerCapture(e.pointerId);
+        eRedraw(); eRenderOptions();
+      }
+    }
+  });
+  editorCanvas.addEventListener('pointermove', (e) => {
+    if(eDrawing){
+      const pt = eCanvasPoint(e);
+      eDraws[eDraws.length - 1].points.push(pt);
+      eRedraw();
+    } else if(eDragText && eSelectedText !== null){
+      const pt = eCanvasPoint(e);
+      eTexts[eSelectedText].x = pt.x - eDragOffset.x;
+      eTexts[eSelectedText].y = pt.y - eDragOffset.y;
+      eRedraw();
+    }
+  });
+  ['pointerup','pointercancel'].forEach(evt => editorCanvas.addEventListener(evt, () => {
+    if(eDrawing){ eDrawing = false; ePushHistory(); }
+    if(eDragText){ eDragText = false; ePushHistory(); }
+  }));
+
+  // ---------- Save ----------
+  eFormatBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      eFormatBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      eFormat = btn.dataset.eformat;
+    });
+  });
+  eSaveBtn.addEventListener('click', () => {
+    if(!eImg) return;
+    const ext = eFormat.split('/')[1].replace('jpeg', 'jpg');
+    editorCanvas.toBlob((blob) => {
+      if(!blob) return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      const base = eFile.name.replace(/\.[^/.]+$/, '');
+      a.download = `${base}-edite.${ext}`;
+      a.click();
+    }, eFormat, HQ);
+  });
+
+  eOpenAnother.addEventListener('click', () => {
+    eImg = null; eFile = null;
+    editorApp.classList.remove('show');
+    eDropzone.style.display = '';
+    eFileInput.value = '';
+  });
+
+  eDropzone.addEventListener('click', () => eFileInput.click());
+  eDropzone.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') eFileInput.click(); });
+  eFileInput.addEventListener('change', (e) => eOpenFile(e.target.files[0]));
+  ['dragover','dragenter'].forEach(evt => eDropzone.addEventListener(evt, (e) => { e.preventDefault(); eDropzone.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(evt => eDropzone.addEventListener(evt, (e) => { e.preventDefault(); eDropzone.classList.remove('drag'); }));
+  eDropzone.addEventListener('drop', (e) => eOpenFile(e.dataTransfer.files[0]));
+
+  setETool('adjust');
 })();
 </script>
 </body>
