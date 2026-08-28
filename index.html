@@ -13,13 +13,13 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nezoow.github.io/compresseur-image/">
 <meta property="og:title" content="Compresser, redimensionner, recadrer une image — gratuit, sans upload">
-<meta property="og:description" content="Un outil complet pour vos images, directement dans votre navigateur : compression, redimensionnement et recadrage. Gratuit, illimité, rien n'est envoyé sur un serveur.">
+<meta property="og:description" content="Trois outils pour vos images, directement dans votre navigateur : compression, redimensionnement et recadrage, utilisables séparément. Gratuit, illimité, rien n'est envoyé sur un serveur.">
 <meta property="og:image" content="https://nezoow.github.io/compresseur-image/og-image.png">
 <meta property="og:locale" content="fr_FR">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Compresser, redimensionner, recadrer une image — gratuit, sans upload">
-<meta name="twitter:description" content="Un outil complet pour vos images, directement dans votre navigateur, sans upload sur un serveur.">
+<meta name="twitter:description" content="Trois outils pour vos images, utilisables séparément, directement dans votre navigateur.">
 <meta name="twitter:image" content="https://nezoow.github.io/compresseur-image/og-image.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,8 +46,8 @@
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html{ scroll-behavior: smooth; background: var(--bg); }
-  html,body{ background: var(--bg); }
   body{
+    background: var(--bg);
     color: var(--ink);
     font-family: var(--sans);
     min-height:100vh;
@@ -65,7 +65,7 @@
   /* Sticky top nav */
   .topnav{
     position: sticky; top: 0; z-index: 30;
-    background: rgba(242,244,251,0.78); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background: rgba(242,244,251,0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
   }
   .topnav-inner{
@@ -76,8 +76,10 @@
   .toolnav a{
     display:flex; align-items:center; gap: 7px; text-decoration:none; color: var(--ink);
     font-size: 13.5px; font-weight: 600; padding: 9px 13px; border-radius: 10px; transition: background .15s;
+    border: 1px solid transparent;
   }
   .toolnav a:hover{ background: var(--card); }
+  .toolnav a.active{ background: var(--card); border-color: var(--border); box-shadow: 0 1px 3px rgba(19,21,28,0.05); }
   .toolnav a .dot{ width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
   .toolnav a .dot.green{ background: var(--green); }
   .toolnav a .dot.blue{ background: var(--blue); }
@@ -130,31 +132,44 @@
 
   .filebar{
     display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-    padding: 14px 14px 16px;
+    padding: 14px 14px 4px;
   }
   .filebar .fname{ font-weight:600; font-size: 13.5px; word-break: break-all; }
   .filebar .fdim{ font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
+  /* Mode indicator */
+  .mode-title{
+    display:flex; align-items:center; gap: 9px; padding: 16px 14px 4px;
+    font-family: var(--display); font-weight: 700; font-size: 16px;
+  }
+  .mode-title .midot{ width: 10px; height: 10px; border-radius: 50%; }
+  .mode-title .midot.green{ background: var(--green); } .mode-title.compress .midot{ background: var(--green); }
+  .mode-title .midot.blue{ background: var(--blue); }
+  .mode-title .midot.pink{ background: var(--pink); }
+  .mode-caption{ padding: 0 14px; color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+  .mode-block{ display:none; scroll-margin-top: 84px; }
+  .mode-block.active{ display:block; }
+
   .stage{
-    position: relative; overflow:hidden; border-radius: 14px; margin: 0 14px;
+    position: relative; overflow:hidden; border-radius: 14px; margin: 14px 14px 0;
     line-height:0; user-select:none; touch-action:none; background: var(--card-soft);
-    scroll-margin-top: 84px;
   }
   .stage img{ display:block; width:100%; height:auto; }
 
   .cropwin{
-    position:absolute; border: 2px solid var(--blue); cursor:move;
+    position:absolute; border: 2px solid var(--pink); cursor:move;
     box-shadow: 0 0 0 9999px rgba(19,21,28,0.38);
   }
   .handle{
     position:absolute; width:16px; height:16px; border-radius:50%;
-    background:#fff; border: 3px solid var(--blue); transform: translate(-50%,-50%);
+    background:#fff; border: 3px solid var(--pink); transform: translate(-50%,-50%);
     box-shadow: 0 1px 4px rgba(19,21,28,0.25);
   }
   .handle.tl, .handle.br{ cursor: nwse-resize; }
   .handle.tr, .handle.bl{ cursor: nesw-resize; }
 
-  .chiprow{ display:flex; flex-wrap:wrap; gap:8px; padding: 16px 14px 0; align-items:center; }
+  .chiprow{ display:flex; flex-wrap:wrap; gap:8px; padding: 14px 14px 0; align-items:center; }
   .chiprow .row-label{ font-size:12.5px; color: var(--muted); font-weight:500; margin-right:2px; }
   .chip{
     font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 8px 14px;
@@ -164,8 +179,8 @@
   .chip:hover{ border-color: var(--blue); }
   .chip.active{ background: var(--black); border-color: var(--black); color:#fff; }
 
-  .controls{ padding: 20px 18px 18px; }
-  .field{ margin-bottom: 20px; scroll-margin-top: 84px; }
+  .controls{ padding: 18px 18px 18px; }
+  .field{ margin-bottom: 0; }
   .field-label{
     font-size: 13px; font-weight:600; display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;
   }
@@ -191,21 +206,22 @@
   }
   input[type=range]::-webkit-slider-thumb{
     -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
-    background: var(--blue); cursor:pointer; border: 3px solid #fff; box-shadow: 0 1px 5px rgba(19,21,28,0.3);
+    background: var(--green); cursor:pointer; border: 3px solid #fff; box-shadow: 0 1px 5px rgba(19,21,28,0.3);
   }
   input[type=range]::-moz-range-thumb{
-    width:20px; height:20px; border-radius:50%; background: var(--blue); cursor:pointer;
+    width:20px; height:20px; border-radius:50%; background: var(--green); cursor:pointer;
     border: 3px solid #fff; box-shadow: 0 1px 5px rgba(19,21,28,0.3);
   }
 
-  .format-row{ display:flex; gap: 8px; }
+  .format-row{ display:flex; gap: 8px; padding: 18px 18px 0; }
+  .format-block .field-label{ padding: 0 18px; }
   .format-btn{
     flex:1; padding: 11px; background: var(--card-soft); border: 1.5px solid var(--border); border-radius: 10px;
     color: var(--ink); font-family: var(--sans); font-weight:600; font-size: 13px; cursor:pointer; transition: all .12s;
   }
   .format-btn.active{ border-color: var(--black); background: var(--black); color: #fff; }
 
-  .meter{ margin: 22px 0 22px; }
+  .meter{ margin: 22px 18px 0; }
   .meter-top{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 9px; }
   .meter-top .mlabel{ font-size:13px; font-weight:600; color: var(--muted); }
   .meter-top .mval{ font-family: var(--display); font-size: 24px; font-weight: 700; color: var(--green); }
@@ -216,7 +232,7 @@
   .sizes b{ color: var(--ink); font-weight:600; font-variant-numeric: tabular-nums; }
   .sizes .arrow{ color: var(--blue); }
 
-  .actions{ display:flex; gap: 10px; }
+  .actions{ display:flex; gap: 10px; padding: 20px 18px 4px; }
   button.primary{
     flex:1; background: var(--black); color:#fff; border:none; border-radius: 12px;
     padding: 15px; font-family: var(--sans); font-weight: 700; font-size: 15px; cursor:pointer;
@@ -271,7 +287,7 @@
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "Any (navigateur web)",
   "url": "https://nezoow.github.io/compresseur-image/",
-  "description": "Outil gratuit pour compresser, redimensionner et recadrer des images JPG, PNG et WebP directement dans le navigateur, sans upload sur un serveur.",
+  "description": "Trois outils gratuits pour compresser, redimensionner ou recadrer des images JPG, PNG et WebP directement dans le navigateur, utilisables séparément, sans upload sur un serveur.",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
   "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "127" }
 }
@@ -284,27 +300,27 @@
     {
       "@type": "Question",
       "name": "Comment compresser une image gratuitement en ligne ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Déposez votre image JPG, PNG ou WebP dans l'outil, ajustez le curseur de qualité, puis téléchargez le résultat. Tout se passe dans votre navigateur, sans upload sur un serveur." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Choisissez l'outil Compression, déposez votre image JPG, PNG ou WebP, ajustez le curseur de qualité, puis téléchargez le résultat. Tout se passe dans votre navigateur, sans upload sur un serveur." }
     },
     {
       "@type": "Question",
       "name": "Comment redimensionner une image sans la déformer ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Gardez le cadenas de proportion activé : en changeant la largeur, la hauteur s'ajuste automatiquement selon le ratio de votre cadrage, ce qui évite toute déformation." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Dans l'outil Redimensionnement, gardez le cadenas de proportion activé : en changeant la largeur, la hauteur s'ajuste automatiquement pour éviter toute déformation." }
     },
     {
       "@type": "Question",
       "name": "Comment recadrer une image en ligne ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Une fois l'image chargée, faites glisser le cadre bleu directement sur l'aperçu, ou tirez ses coins pour l'agrandir. Des formats rapides (carré, story, 16:9) sont aussi proposés." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Dans l'outil Recadrage, faites glisser le cadre rose directement sur l'aperçu, ou tirez ses coins pour l'agrandir. Des ratios rapides (carré, story, 16:9) sont aussi proposés." }
+    },
+    {
+      "@type": "Question",
+      "name": "Pourquoi les trois outils sont-ils séparés ?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Pour rester simple : chaque outil applique un seul traitement à la fois, sans réglages cachés qui s'additionnent. Vous savez toujours exactement ce que vous appliquez à votre image." }
     },
     {
       "@type": "Question",
       "name": "Mes images sont-elles envoyées sur un serveur ?",
       "acceptedAnswer": { "@type": "Answer", "text": "Non. Le traitement utilise l'API Canvas du navigateur : l'image reste sur votre appareil du début à la fin." }
-    },
-    {
-      "@type": "Question",
-      "name": "Y a-t-il une limite d'utilisation ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Non, l'outil est gratuit et utilisable sans limite, sans inscription ni compte à créer." }
     }
   ]
 }
@@ -322,17 +338,17 @@
         <span class="brand-name">imageatelier</span>
       </header>
       <nav class="toolnav">
-        <a href="#compress-section"><span class="dot green"></span>Compression</a>
-        <a href="#resize-section"><span class="dot blue"></span>Redimensionnement</a>
-        <a href="#crop-section"><span class="dot pink"></span>Recadrage</a>
+        <a href="#compress-section" data-mode="compress" class="active"><span class="dot green"></span>Compression</a>
+        <a href="#resize-section" data-mode="resize"><span class="dot blue"></span>Redimensionnement</a>
+        <a href="#crop-section" data-mode="crop"><span class="dot pink"></span>Recadrage</a>
       </nav>
     </div>
   </div>
 
   <div class="wrap">
     <div class="hero">
-      <h1>Compressez, redimensionnez et recadrez vos images</h1>
-      <p class="sub">Gratuit, illimité, et tout se passe dans votre navigateur — aucune image envoyée sur un serveur.</p>
+      <h1>Compressez, redimensionnez ou recadrez vos images</h1>
+      <p class="sub">Trois outils séparés, gratuits et illimités — un seul traitement à la fois, rien n'est envoyé sur un serveur.</p>
     </div>
 
     <main class="toolcard">
@@ -349,76 +365,93 @@
           <span class="fdim" id="fileDim">—</span>
         </div>
 
-        <span id="crop-section" style="display:block; scroll-margin-top:84px;"></span>
-        <div class="stage" id="stage">
-          <img id="previewImg" alt="Aperçu de l'image à recadrer">
-          <div class="cropwin" id="cropwin">
-            <div class="handle tl" data-corner="tl"></div>
-            <div class="handle tr" data-corner="tr"></div>
-            <div class="handle bl" data-corner="bl"></div>
-            <div class="handle br" data-corner="br"></div>
+        <!-- COMPRESS MODE -->
+        <div class="mode-block active" id="compress-section" data-mode="compress">
+          <div class="mode-title compress"><span class="midot green"></span>Compression</div>
+          <p class="mode-caption">Réduit le poids du fichier, garde les dimensions d'origine.</p>
+          <div class="controls">
+            <div class="field">
+              <div class="field-label">Qualité <b id="qualityVal">75%</b></div>
+              <input type="range" id="quality" min="10" max="100" value="75">
+            </div>
           </div>
         </div>
 
-        <div class="chiprow">
-          <span class="row-label">Cadrage</span>
-          <button class="chip active" data-ratio="0">Libre</button>
-          <button class="chip" data-ratio="1">1:1</button>
-          <button class="chip" data-ratio="0.8">4:5</button>
-          <button class="chip" data-ratio="1.7778">16:9</button>
-          <button class="chip" data-ratio="0.5625">9:16</button>
+        <!-- RESIZE MODE -->
+        <div class="mode-block" id="resize-section" data-mode="resize">
+          <div class="mode-title"><span class="midot blue"></span>Redimensionnement</div>
+          <p class="mode-caption">Change les dimensions en pixels, sans toucher au cadrage.</p>
+          <div class="chiprow">
+            <span class="row-label">Formats rapides</span>
+            <button class="chip" data-preset="1080,1080,1">Post carré</button>
+            <button class="chip" data-preset="1080,1920,0.5625">Story</button>
+            <button class="chip" data-preset="1280,720,1.7778">Miniature YT</button>
+            <button class="chip" data-preset="1584,396,4">Bannière LinkedIn</button>
+            <button class="chip" data-preset="512,512,1">Avatar</button>
+          </div>
+          <div class="controls">
+            <div class="field">
+              <div class="field-label"><span>Dimensions de sortie</span><b>px</b></div>
+              <div class="dims-row">
+                <input type="number" id="widthInput" min="1" max="8000">
+                <span class="dims-x">×</span>
+                <input type="number" id="heightInput" min="1" max="8000">
+                <button class="lock-btn active" id="lockBtn" title="Verrouiller les proportions" aria-label="Verrouiller les proportions">
+                  <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="chiprow">
-          <span class="row-label">Formats rapides</span>
-          <button class="chip" data-preset="1080,1080,1">Post carré</button>
-          <button class="chip" data-preset="1080,1920,0.5625">Story</button>
-          <button class="chip" data-preset="1280,720,1.7778">Miniature YT</button>
-          <button class="chip" data-preset="1584,396,4">Bannière LinkedIn</button>
-          <button class="chip" data-preset="512,512,1">Avatar</button>
+
+        <!-- CROP MODE -->
+        <div class="mode-block" id="crop-section" data-mode="crop">
+          <div class="mode-title"><span class="midot pink"></span>Recadrage</div>
+          <p class="mode-caption">Choisissez la zone à garder, l'image est exportée à la taille du cadre.</p>
+          <div class="stage" id="stage">
+            <img id="previewImg" alt="Aperçu de l'image à recadrer">
+            <div class="cropwin" id="cropwin">
+              <div class="handle tl" data-corner="tl"></div>
+              <div class="handle tr" data-corner="tr"></div>
+              <div class="handle bl" data-corner="bl"></div>
+              <div class="handle br" data-corner="br"></div>
+            </div>
+          </div>
+          <div class="chiprow">
+            <span class="row-label">Ratio</span>
+            <button class="chip active" data-ratio="0">Libre</button>
+            <button class="chip" data-ratio="1">1:1</button>
+            <button class="chip" data-ratio="0.8">4:5</button>
+            <button class="chip" data-ratio="1.7778">16:9</button>
+            <button class="chip" data-ratio="0.5625">9:16</button>
+          </div>
         </div>
 
-        <div class="controls">
-          <div class="field" id="resize-section">
-            <div class="dims-row">
-              <input type="number" id="widthInput" min="1" max="8000">
-              <span class="dims-x">×</span>
-              <input type="number" id="heightInput" min="1" max="8000">
-              <button class="lock-btn active" id="lockBtn" title="Verrouiller les proportions" aria-label="Verrouiller les proportions">
-                <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-              </button>
-            </div>
+        <div class="format-block">
+          <div class="field-label" style="padding:20px 18px 0;">Format de sortie</div>
+          <div class="format-row">
+            <button class="format-btn active" data-format="image/jpeg">JPEG</button>
+            <button class="format-btn" data-format="image/webp">WEBP</button>
+            <button class="format-btn" data-format="image/png">PNG</button>
           </div>
+        </div>
 
-          <div class="field" id="compress-section">
-            <input type="range" id="quality" min="10" max="100" value="75">
+        <div class="meter">
+          <div class="meter-top">
+            <span class="mlabel">Poids du fichier</span>
+            <span class="mval" id="meterVal">0%</span>
           </div>
+          <div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div>
+          <div class="sizes">
+            <span>Original <b id="sizeOrig">—</b></span>
+            <span class="arrow">→</span>
+            <span>Sortie <b id="sizeNew">—</b></span>
+          </div>
+        </div>
 
-          <div class="field">
-            <div class="field-label">Format de sortie</div>
-            <div class="format-row">
-              <button class="format-btn active" data-format="image/jpeg">JPEG</button>
-              <button class="format-btn" data-format="image/webp">WEBP</button>
-              <button class="format-btn" data-format="image/png">PNG</button>
-            </div>
-          </div>
-
-          <div class="meter">
-            <div class="meter-top">
-              <span class="mlabel">Réduction du poids</span>
-              <span class="mval" id="meterVal">0%</span>
-            </div>
-            <div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div>
-            <div class="sizes">
-              <span>Original <b id="sizeOrig">—</b></span>
-              <span class="arrow">→</span>
-              <span>Sortie <b id="sizeNew">—</b></span>
-            </div>
-          </div>
-
-          <div class="actions">
-            <button class="primary" id="downloadBtn" disabled>Télécharger</button>
-            <button class="ghost" id="resetBtn">Recommencer</button>
-          </div>
+        <div class="actions">
+          <button class="primary" id="downloadBtn" disabled>Télécharger</button>
+          <button class="ghost" id="resetBtn">Recommencer</button>
         </div>
       </div>
 
@@ -427,12 +460,12 @@
 
     <div class="content">
       <section>
-        <h2>Trois outils, un seul atelier</h2>
-        <p>La plupart des sites séparent compression, redimensionnement et recadrage en trois outils différents. Ici, les trois s'appliquent ensemble en un seul export : cadrez la zone à conserver, fixez la résolution de sortie, réglez la qualité — le fichier final combine les trois réglages.</p>
+        <h2>Trois outils séparés, un seul traitement à la fois</h2>
+        <p>Contrairement à un éditeur qui combine tout en même temps, chaque outil ici fait une seule chose, clairement : vous savez exactement ce que vous appliquez à votre image.</p>
         <ul>
-          <li><strong>Compression :</strong> réduisez le poids sans upload, pour des pages web plus rapides</li>
-          <li><strong>Redimensionnement :</strong> imposez une largeur et une hauteur précises, en pixels</li>
-          <li><strong>Recadrage :</strong> choisissez la zone exacte à garder, avec des ratios prêts à l'emploi pour les réseaux sociaux</li>
+          <li><strong>Compression :</strong> réduit le poids sans upload, dimensions inchangées</li>
+          <li><strong>Redimensionnement :</strong> impose une largeur et une hauteur précises, en pixels</li>
+          <li><strong>Recadrage :</strong> choisit la zone exacte à garder, sans changer la qualité</li>
         </ul>
       </section>
 
@@ -444,12 +477,16 @@
       <section>
         <h2>Questions fréquentes</h2>
         <details>
+          <summary>Pourquoi les trois outils sont-ils séparés ?</summary>
+          <p>Pour rester simple : chaque outil applique un seul traitement à la fois, sans réglages cachés qui s'additionnent. Basculez d'un outil à l'autre via le menu en haut.</p>
+        </details>
+        <details>
           <summary>Comment recadrer une image en ligne ?</summary>
-          <p>Une fois l'image chargée, faites glisser le cadre bleu directement sur l'aperçu, ou tirez ses coins pour l'agrandir. Les puces "Cadrage" appliquent un ratio fixe (carré, portrait, paysage) automatiquement centré.</p>
+          <p>Ouvrez l'outil Recadrage, puis faites glisser le cadre rose directement sur l'aperçu, ou tirez ses coins. Les puces "Ratio" appliquent une forme fixe automatiquement centrée.</p>
         </details>
         <details>
           <summary>Comment redimensionner une image sans la déformer ?</summary>
-          <p>Laissez le cadenas activé à côté des champs largeur/hauteur : la proportion du cadrage est conservée automatiquement quand vous changez l'une des deux valeurs.</p>
+          <p>Dans l'outil Redimensionnement, laissez le cadenas activé : la proportion d'origine est conservée automatiquement quand vous changez la largeur ou la hauteur.</p>
         </details>
         <details>
           <summary>Quel format choisir : JPG, PNG ou WebP ?</summary>
@@ -457,7 +494,7 @@
         </details>
         <details>
           <summary>Y a-t-il une limite de fichiers ou faut-il créer un compte ?</summary>
-          <p>Non, l'outil est entièrement gratuit, sans inscription et sans limite de nombre d'utilisations.</p>
+          <p>Non, les trois outils sont entièrement gratuits, sans inscription et sans limite de nombre d'utilisations.</p>
         </details>
       </section>
     </div>
@@ -491,12 +528,17 @@
   const formatBtns = document.querySelectorAll('.format-btn');
   const ratioChips = document.querySelectorAll('[data-ratio]');
   const presetChips = document.querySelectorAll('[data-preset]');
+  const navLinks = document.querySelectorAll('.toolnav a');
+  const modeBlocks = document.querySelectorAll('.mode-block');
 
+  const HQ = 0.92; // qualité fixe pour redimensionnement / recadrage (pas de perte visible)
+  let mode = 'compress';
   let img = null;
   let file = null;
   let naturalW = 0, naturalH = 0;
-  let crop = null;
+  let crop = null;              // rect utilisé par le mode Recadrage
   let activeRatio = 0;
+  let resizeSourceRect = null;  // rect centré auto-calculé quand un preset de resize est choisi
   let scale = 1;
   let selectedFormat = 'image/jpeg';
   let currentBlob = null;
@@ -513,6 +555,28 @@
   }
   function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
 
+  // ---------- Mode switching ----------
+  function setMode(m){
+    mode = m;
+    modeBlocks.forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+    navLinks.forEach(a => a.classList.toggle('active', a.dataset.mode === m));
+    if(m === 'crop' && img){
+      requestAnimationFrame(() => { computeScale(); renderCropwin(); });
+    }
+    if(img) doExport();
+  }
+
+  navLinks.forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const m = a.dataset.mode;
+      setMode(m);
+      const target = panel.classList.contains('show') ? document.getElementById(a.getAttribute('href').slice(1)) : dropzone;
+      if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // ---------- File loading ----------
   function openFile(f){
     if(!f || !f.type.startsWith('image/')) return;
     file = f;
@@ -527,13 +591,16 @@
       fileDimEl.textContent = `${naturalW}×${naturalH}px · ${formatBytes(f.size)}`;
       sizeOrig.textContent = formatBytes(f.size);
       panel.classList.add('show');
+
       crop = { x:0, y:0, w:naturalW, h:naturalH };
       activeRatio = 0;
-      setActiveRatioChip(0);
+      resizeSourceRect = null;
+      ratioChips.forEach(c => c.classList.toggle('active', parseFloat(c.dataset.ratio) === 0));
+      widthInput.value = naturalW;
+      heightInput.value = naturalH;
+
       requestAnimationFrame(() => {
-        computeScale();
-        renderCropwin();
-        syncOutputFields();
+        if(mode === 'crop'){ computeScale(); renderCropwin(); }
         doExport();
       });
     };
@@ -541,7 +608,6 @@
   }
 
   function computeScale(){ scale = previewImg.clientWidth / naturalW; }
-
   function renderCropwin(){
     cropwin.style.left = (crop.x*scale) + 'px';
     cropwin.style.top = (crop.y*scale) + 'px';
@@ -549,16 +615,7 @@
     cropwin.style.height = (crop.h*scale) + 'px';
   }
 
-  function syncOutputFields(){
-    if(document.activeElement === widthInput || document.activeElement === heightInput) return;
-    widthInput.value = Math.round(crop.w);
-    heightInput.value = Math.round(crop.h);
-  }
-
-  function setActiveRatioChip(r){
-    ratioChips.forEach(c => c.classList.toggle('active', parseFloat(c.dataset.ratio) === r));
-  }
-
+  // ---------- Crop mode: ratio chips ----------
   function applyRatioPreset(ratio){
     activeRatio = ratio;
     if(ratio > 0){
@@ -567,32 +624,19 @@
       else { w = naturalW; h = w / ratio; }
       crop = { x:(naturalW-w)/2, y:(naturalH-h)/2, w, h };
       renderCropwin();
-      syncOutputFields();
       doExport();
     }
   }
-
   ratioChips.forEach(chip => {
     chip.addEventListener('click', () => {
-      const r = parseFloat(chip.dataset.ratio);
-      setActiveRatioChip(r);
-      applyRatioPreset(r);
+      ratioChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      applyRatioPreset(parseFloat(chip.dataset.ratio));
     });
   });
 
-  presetChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const [w, h, r] = chip.dataset.preset.split(',').map(Number);
-      setActiveRatioChip(r);
-      applyRatioPreset(r);
-      widthInput.value = w;
-      heightInput.value = h;
-      doExport();
-    });
-  });
-
+  // ---------- Crop mode: drag / resize ----------
   function pointerPos(e){ return { x: e.clientX, y: e.clientY }; }
-
   cropwin.addEventListener('pointerdown', (e) => {
     dragMode = e.target.dataset.corner || 'move';
     dragStart = pointerPos(e);
@@ -600,13 +644,11 @@
     cropwin.setPointerCapture(e.pointerId);
     e.preventDefault();
   });
-
   cropwin.addEventListener('pointermove', (e) => {
     if(!dragMode) return;
     const p = pointerPos(e);
     const dx = (p.x - dragStart.x) / scale;
     const dy = (p.y - dragStart.y) / scale;
-
     if(dragMode === 'move'){
       crop.x = clamp(cropStart.x + dx, 0, naturalW - cropStart.w);
       crop.y = clamp(cropStart.y + dy, 0, naturalH - cropStart.h);
@@ -617,7 +659,6 @@
       if(dragMode.includes('r')) right = clamp(cropStart.x + cropStart.w + dx, left + MIN_CROP, naturalW);
       if(dragMode.includes('t')) top = clamp(cropStart.y + dy, 0, bottom - MIN_CROP);
       if(dragMode.includes('b')) bottom = clamp(cropStart.y + cropStart.h + dy, top + MIN_CROP, naturalH);
-
       if(activeRatio > 0){
         const newW = right - left, newH = bottom - top;
         let w2, h2;
@@ -634,30 +675,43 @@
     }
     renderCropwin();
   });
-
   ['pointerup','pointercancel'].forEach(evt => cropwin.addEventListener(evt, () => {
     if(!dragMode) return;
     dragMode = null;
-    syncOutputFields();
     doExport();
   }));
-
   window.addEventListener('resize', () => {
-    if(!img) return;
+    if(!img || mode !== 'crop') return;
     computeScale();
     renderCropwin();
   });
 
-  function currentCropRatio(){ return crop.w / crop.h; }
+  // ---------- Resize mode: presets + fields ----------
+  presetChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const [w, h, r] = chip.dataset.preset.split(',').map(Number);
+      let cw, ch;
+      if(naturalW / naturalH > r){ ch = naturalH; cw = ch * r; }
+      else { cw = naturalW; ch = cw / r; }
+      resizeSourceRect = { x:(naturalW-cw)/2, y:(naturalH-ch)/2, w:cw, h:ch };
+      widthInput.value = w;
+      heightInput.value = h;
+      doExport();
+    });
+  });
 
+  function resizeRatio(){
+    const r = resizeSourceRect || { w: naturalW, h: naturalH };
+    return r.w / r.h;
+  }
   widthInput.addEventListener('input', () => {
     const w = parseInt(widthInput.value) || 0;
-    if(lockAspect && w > 0){ heightInput.value = Math.round(w / currentCropRatio()); }
+    if(lockAspect && w > 0){ heightInput.value = Math.round(w / resizeRatio()); }
     doExport();
   });
   heightInput.addEventListener('input', () => {
     const h = parseInt(heightInput.value) || 0;
-    if(lockAspect && h > 0){ widthInput.value = Math.round(h * currentCropRatio()); }
+    if(lockAspect && h > 0){ widthInput.value = Math.round(h * resizeRatio()); }
     doExport();
   });
   lockBtn.addEventListener('click', () => {
@@ -665,11 +719,13 @@
     lockBtn.classList.toggle('active', lockAspect);
   });
 
+  // ---------- Compress mode ----------
   qualitySlider.addEventListener('input', () => {
     qualityVal.textContent = qualitySlider.value + '%';
     doExport();
   });
 
+  // ---------- Format ----------
   formatBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       formatBtns.forEach(b => b.classList.remove('active'));
@@ -679,15 +735,31 @@
     });
   });
 
+  // ---------- Export (behaviour depends on active mode only) ----------
   function doExport(){
-    if(!img || !crop) return;
-    const outW = clamp(parseInt(widthInput.value) || Math.round(crop.w), 1, 8000);
-    const outH = clamp(parseInt(heightInput.value) || Math.round(crop.h), 1, 8000);
+    if(!img) return;
+    let sx, sy, sw, sh, outW, outH, quality;
+
+    if(mode === 'crop'){
+      sx = crop.x; sy = crop.y; sw = crop.w; sh = crop.h;
+      outW = Math.round(sw); outH = Math.round(sh);
+      quality = HQ;
+    } else if(mode === 'resize'){
+      const r = resizeSourceRect || { x:0, y:0, w:naturalW, h:naturalH };
+      sx = r.x; sy = r.y; sw = r.w; sh = r.h;
+      outW = clamp(parseInt(widthInput.value) || naturalW, 1, 8000);
+      outH = clamp(parseInt(heightInput.value) || naturalH, 1, 8000);
+      quality = HQ;
+    } else { // compress
+      sx = 0; sy = 0; sw = naturalW; sh = naturalH;
+      outW = naturalW; outH = naturalH;
+      quality = qualitySlider.value / 100;
+    }
+
     canvas.width = outW;
     canvas.height = outH;
     ctx.clearRect(0, 0, outW, outH);
-    ctx.drawImage(img, crop.x, crop.y, crop.w, crop.h, 0, 0, outW, outH);
-    const quality = qualitySlider.value / 100;
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
     canvas.toBlob((blob) => {
       if(!blob) return;
       currentBlob = blob;
@@ -714,19 +786,10 @@
     }
   }
 
-  document.querySelectorAll('.toolnav a').forEach(a => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      const id = a.getAttribute('href').slice(1);
-      const target = panel.classList.contains('show') ? document.getElementById(id) : dropzone;
-      if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-
+  // ---------- Dropzone ----------
   dropzone.addEventListener('click', () => fileInput.click());
   dropzone.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') fileInput.click(); });
   fileInput.addEventListener('change', (e) => openFile(e.target.files[0]));
-
   ['dragover','dragenter'].forEach(evt => dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add('drag'); }));
   ['dragleave','drop'].forEach(evt => dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove('drag'); }));
   dropzone.addEventListener('drop', (e) => openFile(e.dataTransfer.files[0]));
@@ -737,13 +800,13 @@
     const a = document.createElement('a');
     a.href = URL.createObjectURL(currentBlob);
     const base = file.name.replace(/\.[^/.]+$/, '');
-    a.download = `${base}-edite.${ext}`;
+    a.download = `${base}-${mode}.${ext}`;
     a.click();
   });
 
   resetBtn.addEventListener('click', () => {
     panel.classList.remove('show');
-    img = null; file = null; currentBlob = null; crop = null;
+    img = null; file = null; currentBlob = null; crop = null; resizeSourceRect = null;
     fileInput.value = '';
     downloadBtn.disabled = true;
   });
