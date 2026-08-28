@@ -89,6 +89,8 @@
   .toolnav a.active[data-mode="resize"]::after{ background: var(--blue); }
   .toolnav a.active[data-mode="crop"]::after{ background: var(--pink); }
   .toolnav a.active[data-mode="editor"]::after{ background: var(--amber); }
+  .toolnav a.active[data-mode="heic"]::after{ background: #7C3AED; }
+  .toolnav a .dot.purple{ background: #7C3AED; }
   .toolnav a .dot{ width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
   .toolnav a .dot.green{ background: var(--green); }
   .toolnav a .dot.blue{ background: var(--blue); }
@@ -418,7 +420,7 @@
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "Any (navigateur web)",
   "url": "https://nezoow.github.io/compresseur-image/",
-  "description": "Outils gratuits pour compresser, redimensionner, recadrer et éditer des images JPG, PNG et WebP directement dans le navigateur, sans upload sur un serveur.",
+  "description": "Outils gratuits pour compresser, redimensionner, recadrer, convertir des fichiers HEIC en JPG et éditer des images directement dans le navigateur, sans upload sur un serveur.",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
   "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "127" }
 }
@@ -439,6 +441,7 @@
         <a href="#compress-section" data-mode="compress" class="active"><span class="dot green"></span>Compression</a>
         <a href="#resize-section" data-mode="resize"><span class="dot blue"></span>Redimensionnement</a>
         <a href="#crop-section" data-mode="crop"><span class="dot pink"></span>Recadrage</a>
+        <a href="#heic-section" data-mode="heic"><span class="dot purple"></span>HEIC → JPG</a>
         <a href="#editor-section" data-mode="editor"><span class="dot amber"></span>Éditeur de photos</a>
       </nav>
     </div>
@@ -675,12 +678,13 @@
     <div class="content">
       <div class="content-grid">
         <section>
-          <h2>Quatre outils, un seul site</h2>
-          <p>Les trois premiers outils font une seule chose chacun, clairement. L'éditeur de photos, lui, permet de combiner plusieurs retouches (lumière, rotation, dessin, texte) dans un seul espace de travail.</p>
+          <h2>Cinq outils, un seul site</h2>
+          <p>Les quatre premiers outils font une seule chose chacun, clairement. L'éditeur de photos, lui, permet de combiner plusieurs retouches (lumière, rotation, dessin, texte) dans un seul espace de travail.</p>
           <ul>
             <li><strong>Compression :</strong> réduit le poids, dimensions inchangées</li>
             <li><strong>Redimensionnement :</strong> largeur et hauteur précises, en pixels</li>
             <li><strong>Recadrage :</strong> zone exacte à garder, sans changer la qualité</li>
+            <li><strong>HEIC → JPG :</strong> convertit les photos HEIC/HEIF en JPG</li>
             <li><strong>Éditeur de photos :</strong> ajustements, rotation, dessin, texte</li>
           </ul>
         </section>
@@ -701,6 +705,14 @@
           <details>
             <summary>Pourquoi certains outils sont-ils "Bientôt disponible" ?</summary>
             <p>Les stickers, cadres, la suppression d'arrière-plan et la fusion demandent des bibliothèques d'images ou de l'intelligence artificielle. Plutôt que de simuler ces fonctions, on préfère être honnête : elles arriveront plus tard.</p>
+          </details>
+          <details>
+            <summary>Comment convertir un HEIC en JPG ?</summary>
+            <p>Ouvrez l’outil « HEIC → JPG », déposez votre fichier HEIC ou HEIF, puis téléchargez automatiquement la version JPG. La conversion est effectuée localement dans votre navigateur.</p>
+          </details>
+          <details>
+            <summary>Mes fichiers HEIC sont-ils envoyés sur un serveur ?</summary>
+            <p>Non. La conversion HEIC → JPG est réalisée directement dans votre navigateur. Votre fichier ne passe pas par un serveur SizePix.</p>
           </details>
           <details>
             <summary>Comment recadrer une image en ligne ?</summary>
@@ -725,6 +737,7 @@
     <footer>Fonctionne hors-ligne une fois la page chargée · Traitement 100% local, aucune image envoyée sur un serveur</footer>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <script>
 (function(){
   /* ============================================================
@@ -779,6 +792,11 @@
       h1: "Recadrez vos images",
       sub: "Choisissez la zone exacte à garder, avec des ratios prêts à l'emploi. Gratuit, illimité, sans upload."
     },
+    heic: {
+      pageTitle: "Convertir HEIC en JPG en ligne gratuit — SizePix",
+      h1: "Convertissez vos HEIC en JPG",
+      sub: "Transformez vos photos HEIC en JPG directement dans votre navigateur. Gratuit, illimité, sans upload."
+    },
     editor: {
       pageTitle: "Éditeur de photos en ligne gratuit — SizePix",
       h1: "Éditez vos photos",
@@ -827,6 +845,20 @@
       modeBlocks.forEach(b => b.classList.toggle('active', b.dataset.mode === m));
       toolcard.dataset.mode = m;
       cropChips.style.display = (m === 'crop') ? 'flex' : 'none';
+
+      const isHeic = m === 'heic';
+      dropzone.querySelector('strong').textContent = isHeic ? 'Déposez un fichier HEIC ici' : 'Déposez une image ici';
+      dropzone.querySelector('p').textContent = isHeic
+        ? 'HEIC / HEIF — ou cliquez pour parcourir'
+        : 'JPG, PNG ou WebP — ou cliquez pour parcourir';
+      fileInput.accept = isHeic
+        ? 'image/heic,image/heif,.heic,.heif'
+        : 'image/png, image/jpeg, image/webp';
+
+      // HEIC → JPG is a dedicated converter: no quality/resize/crop controls.
+      document.querySelector('.format-block').style.display = isHeic ? 'none' : '';
+      document.querySelector('.meter').style.display = isHeic ? 'none' : '';
+      document.querySelector('.actions .ghost').style.display = isHeic ? 'none' : '';
     }
   }
 
@@ -884,35 +916,93 @@
   })();
 
   // ---------- File loading (simple tools) ----------
-  function openFile(f){
-    if(!f || !f.type.startsWith('image/')) return;
-    file = f;
-    const url = URL.createObjectURL(f);
-    const im = new Image();
-    im.onload = () => {
-      img = im;
-      naturalW = im.naturalWidth;
-      naturalH = im.naturalHeight;
-      previewImg.src = url;
-      fileNameEl.textContent = f.name;
-      fileDimEl.textContent = `${naturalW}×${naturalH}px · ${formatBytes(f.size)}`;
-      sizeOrig.textContent = formatBytes(f.size);
-      panel.classList.add('show');
+  async function openFile(f){
+    if(!f) return;
 
-      crop = { x:0, y:0, w:naturalW, h:naturalH };
-      activeRatio = 0;
-      resizeSourceRect = null;
-      ratioChips.forEach(c => c.classList.toggle('active', parseFloat(c.dataset.ratio) === 0));
-      widthInput.value = naturalW;
-      heightInput.value = naturalH;
+    const name = (f.name || '').toLowerCase();
+    const isHeic = /\\.(heic|heif)$/.test(name) || /image\\/(heic|heif)/i.test(f.type);
 
-      requestAnimationFrame(() => {
-        computeScale();
-        renderCropwin();
-        doExport();
-      });
-    };
-    im.src = url;
+    if(mode === 'heic' && !isHeic){
+      alert('Veuillez sélectionner un fichier HEIC ou HEIF.');
+      return;
+    }
+    if(mode !== 'heic' && isHeic){
+      alert('Les fichiers HEIC doivent être ouverts avec l’outil « HEIC → JPG ».');
+      return;
+    }
+    if(!f.type.startsWith('image/') && !isHeic) return;
+
+    try {
+      let sourceFile = f;
+
+      if(isHeic){
+        if(typeof heic2any === 'undefined'){
+          alert('Le convertisseur HEIC n’a pas pu être chargé. Vérifiez votre connexion puis rechargez la page.');
+          return;
+        }
+
+        dropzone.querySelector('strong').textContent = 'Conversion du HEIC…';
+        dropzone.querySelector('p').textContent = 'Traitement 100% local dans votre navigateur';
+
+        const converted = await heic2any({
+          blob: f,
+          toType: 'image/jpeg',
+          quality: 0.92
+        });
+        const convertedBlob = Array.isArray(converted) ? converted[0] : converted;
+        sourceFile = new File(
+          [convertedBlob],
+          f.name.replace(/\\.(heic|heif)$/i, '.jpg'),
+          { type: 'image/jpeg', lastModified: Date.now() }
+        );
+      }
+
+      file = f;
+      const url = URL.createObjectURL(sourceFile);
+      const im = new Image();
+
+      im.onload = () => {
+        img = im;
+        naturalW = im.naturalWidth;
+        naturalH = im.naturalHeight;
+        previewImg.src = url;
+        fileNameEl.textContent = f.name + (isHeic ? ' → JPG' : '');
+        fileDimEl.textContent = `${naturalW}×${naturalH}px · ${formatBytes(f.size)}`;
+        sizeOrig.textContent = formatBytes(f.size);
+        panel.classList.add('show');
+
+        crop = { x:0, y:0, w:naturalW, h:naturalH };
+        activeRatio = 0;
+        resizeSourceRect = null;
+        ratioChips.forEach(c => c.classList.toggle('active', parseFloat(c.dataset.ratio) === 0));
+        widthInput.value = naturalW;
+        heightInput.value = naturalH;
+
+        // HEIC → JPG always exports as JPEG.
+        if(isHeic){
+          selectedFormat = 'image/jpeg';
+          formatBtns.forEach(b => b.classList.toggle('active', b.dataset.format === 'image/jpeg'));
+        }
+
+        requestAnimationFrame(() => {
+          computeScale();
+          renderCropwin();
+          doExport();
+        });
+      };
+
+      im.onerror = () => {
+        URL.revokeObjectURL(url);
+        alert('Impossible de lire cette image.');
+      };
+      im.src = url;
+
+    } catch(err) {
+      console.error('HEIC conversion error:', err);
+      alert('Impossible de convertir ce fichier HEIC. Vérifiez que le fichier est valide.');
+      dropzone.querySelector('strong').textContent = 'Déposez un fichier HEIC ici';
+      dropzone.querySelector('p').textContent = 'HEIC / HEIF — ou cliquez pour parcourir';
+    }
   }
 
   function computeScale(){ scale = previewImg.clientWidth / naturalW; }
@@ -1063,13 +1153,14 @@
     ctx.clearRect(0, 0, outW, outH);
     ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
     exportDims.textContent = `${outW}×${outH}px`;
+    const outputFormat = (mode === 'heic') ? 'image/jpeg' : selectedFormat;
     canvas.toBlob((blob) => {
       if(!blob) return;
       currentBlob = blob;
       updateMeter(file.size, blob.size);
       sizeNew.textContent = formatBytes(blob.size);
       downloadBtn.disabled = false;
-    }, selectedFormat, quality);
+    }, outputFormat, quality);
   }
 
   function updateMeter(orig, compressed){
@@ -1098,7 +1189,8 @@
 
   downloadBtn.addEventListener('click', () => {
     if(!currentBlob) return;
-    const ext = selectedFormat.split('/')[1].replace('jpeg','jpg');
+    const outputFormat = (mode === 'heic') ? 'image/jpeg' : selectedFormat;
+    const ext = outputFormat.split('/')[1].replace('jpeg','jpg');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(currentBlob);
     const base = file.name.replace(/\.[^/.]+$/, '');
@@ -1111,6 +1203,7 @@
     img = null; file = null; currentBlob = null; crop = null; resizeSourceRect = null;
     fileInput.value = '';
     downloadBtn.disabled = true;
+    applyModeUI(mode);
   });
 
   /* ============================================================
