@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compresser, redimensionner et recadrer une image en ligne — gratuit, sans upload</title>
+<title>Compresser une image en ligne gratuit — imageatelier</title>
 <meta name="description" content="Compressez, redimensionnez et recadrez vos images JPG, PNG et WebP gratuitement, directement dans votre navigateur. Formats prêts à l'emploi Instagram, YouTube, LinkedIn. Aucun upload, aucune inscription.">
 <meta name="keywords" content="compresseur image, redimensionner image en ligne, recadrer image en ligne, réduire taille image, compression JPG PNG WebP, format instagram story, miniature youtube, optimiser image gratuit">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -55,12 +55,12 @@
     overflow-x: hidden;
     padding: 0 0 90px;
   }
-  .blob{ position:absolute; border-radius:50%; filter: blur(60px); z-index:0; pointer-events:none; }
-  .blob-a{ width:520px; height:520px; background: #DCEBFF; top:-220px; right:-160px; }
-  .blob-b{ width:460px; height:460px; background: #DFFBE6; top:280px; left:-220px; }
-  .blob-c{ width:380px; height:380px; background: #FBE4F2; bottom:-160px; right:-140px; }
+  .blob{ position:absolute; border-radius:50%; filter: blur(70px); z-index:0; pointer-events:none; }
+  .blob-a{ width:600px; height:600px; background: #DCEBFF; top:-260px; right:-200px; }
+  .blob-b{ width:520px; height:520px; background: #DFFBE6; top:320px; left:-260px; }
+  .blob-c{ width:420px; height:420px; background: #FBE4F2; bottom:-180px; right:-160px; }
 
-  .wrap{ max-width: 760px; margin: 0 auto; position: relative; z-index: 1; padding: 0 20px; }
+  .wrap{ max-width: 1120px; margin: 0 auto; position: relative; z-index: 1; padding: 0 28px; }
 
   /* Sticky top nav */
   .topnav{
@@ -69,7 +69,7 @@
     border-bottom: 1px solid var(--border);
   }
   .topnav-inner{
-    max-width: 760px; margin: 0 auto; padding: 14px 20px;
+    max-width: 1120px; margin: 0 auto; padding: 14px 28px;
     display:flex; align-items:center; justify-content:space-between; gap: 16px; flex-wrap: wrap;
   }
   .toolnav{ display:flex; gap: 4px; }
@@ -102,14 +102,14 @@
   .brand-name{ font-family: var(--display); font-weight:700; font-size: 17px; }
 
   /* Hero */
-  .hero{ text-align:center; padding: 46px 0 30px; transition: opacity .16s ease, transform .16s ease; }
+  .hero{ text-align:center; padding: 50px 0 32px; transition: opacity .16s ease, transform .16s ease; }
   .hero.fading, .toolcard.fading{ opacity:0; transform: translateY(6px); }
   h1{
-    font-family: var(--display); font-weight: 800; font-size: clamp(32px, 5.2vw, 46px);
+    font-family: var(--display); font-weight: 800; font-size: clamp(32px, 4.4vw, 44px);
     line-height: 1.14; letter-spacing: -0.01em; color: var(--ink); max-width: 18ch; margin: 0 auto;
   }
   .sub{
-    color: var(--muted); font-size: 16px; margin-top: 16px; max-width: 46ch;
+    color: var(--muted); font-size: 16px; margin-top: 16px; max-width: 50ch;
     margin-left:auto; margin-right:auto; line-height:1.55;
   }
 
@@ -122,52 +122,41 @@
   .dropzone{
     border: 2px dashed var(--border); border-radius: 16px;
     background: var(--card-soft);
-    padding: 54px 24px; text-align:center; cursor:pointer; transition: border-color .15s, background .15s;
+    padding: 74px 24px; text-align:center; cursor:pointer; transition: border-color .15s, background .15s;
   }
   .dropzone:hover, .dropzone.drag{ border-color: var(--blue); background: var(--blue-bg); }
   .dropzone .dzicon{
-    width:52px; height:52px; border-radius:14px; background: var(--blue-bg); margin: 0 auto 16px;
+    width:56px; height:56px; border-radius:14px; background: var(--blue-bg); margin: 0 auto 18px;
     display:flex; align-items:center; justify-content:center;
   }
-  .dropzone .dzicon svg{ width:24px; height:24px; stroke: var(--blue); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .dropzone strong{ display:block; font-family: var(--display); font-size: 18px; font-weight:700; }
+  .dropzone .dzicon svg{ width:26px; height:26px; stroke: var(--blue); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .dropzone strong{ display:block; font-family: var(--display); font-size: 19px; font-weight:700; }
   .dropzone p{ color: var(--muted); font-size: 13.5px; margin-top: 6px; }
   input[type=file]{ display:none; }
 
   .panel{ display:none; }
-  .panel.show{ display:block; }
+  .panel.show{ display:grid; grid-template-columns: 1fr 350px; align-items: start; }
 
+  /* Left: preview pane */
+  .previewPane{ padding: 14px; }
   .filebar{
     display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-    padding: 14px 14px 4px;
+    padding: 0 2px 12px;
   }
   .filebar .fname{ font-weight:600; font-size: 13.5px; word-break: break-all; }
   .filebar .fdim{ font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
-  /* Mode indicator */
-  .mode-title{
-    display:flex; align-items:center; gap: 9px; padding: 16px 14px 4px;
-    font-family: var(--display); font-weight: 700; font-size: 16px;
-  }
-  .mode-title .midot{ width: 10px; height: 10px; border-radius: 50%; }
-  .mode-title .midot.green{ background: var(--green); } .mode-title.compress .midot{ background: var(--green); }
-  .mode-title .midot.blue{ background: var(--blue); }
-  .mode-title .midot.pink{ background: var(--pink); }
-  .mode-caption{ padding: 0 14px; color: var(--muted); font-size: 13px; margin-top: 2px; }
-
-  .mode-block{ display:none; scroll-margin-top: 84px; }
-  .mode-block.active{ display:block; }
-
   .stage{
-    position: relative; overflow:hidden; border-radius: 14px; margin: 14px 14px 0;
+    position: relative; overflow:hidden; border-radius: 14px;
     line-height:0; user-select:none; touch-action:none; background: var(--card-soft);
   }
-  .stage img{ display:block; width:100%; height:auto; }
+  .stage img{ display:block; width:100%; height:auto; max-height: 520px; object-fit: contain; margin: 0 auto; }
 
   .cropwin{
-    position:absolute; border: 2px solid var(--pink); cursor:move;
+    position:absolute; border: 2px solid var(--pink); cursor:move; display:none;
     box-shadow: 0 0 0 9999px rgba(19,21,28,0.38);
   }
+  .toolcard[data-mode="crop"] .cropwin{ display:block; }
   .handle{
     position:absolute; width:16px; height:16px; border-radius:50%;
     background:#fff; border: 3px solid var(--pink); transform: translate(-50%,-50%);
@@ -176,34 +165,63 @@
   .handle.tl, .handle.br{ cursor: nwse-resize; }
   .handle.tr, .handle.bl{ cursor: nesw-resize; }
 
-  .chiprow{ display:flex; flex-wrap:wrap; gap:8px; padding: 14px 14px 0; align-items:center; }
-  .chiprow .row-label{ font-size:12.5px; color: var(--muted); font-weight:500; margin-right:2px; }
+  .exportInfo{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 12px 2px 0; font-size: 12.5px; color: var(--muted);
+  }
+  .exportInfo b{ color: var(--ink); font-weight:600; font-variant-numeric: tabular-nums; }
+
+  .previewChiprow{ display:flex; flex-wrap:wrap; gap:8px; padding: 14px 2px 0; align-items:center; }
+  .previewChiprow .row-label{ font-size:12.5px; color: var(--muted); font-weight:500; margin-right:2px; }
+
+  /* Right: controls sidebar */
+  .controlsPane{
+    background: var(--card-soft); border-radius: 14px; padding: 6px 0 14px;
+    border-left: 1px solid var(--border);
+  }
+
+  .mode-block{ display:none; }
+  .mode-block.active{ display:block; }
+
+  .mode-title{
+    display:flex; align-items:center; gap: 9px; padding: 16px 18px 4px;
+    font-family: var(--display); font-weight: 700; font-size: 16px;
+  }
+  .mode-title .midot{ width: 10px; height: 10px; border-radius: 50%; }
+  .mode-title .midot.green{ background: var(--green); }
+  .mode-title .midot.blue{ background: var(--blue); }
+  .mode-title .midot.pink{ background: var(--pink); }
+  .mode-caption{ padding: 0 18px; color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+  .chiprow{ display:flex; flex-wrap:wrap; gap:8px; padding: 14px 18px 0; align-items:center; }
+  .chiprow .row-label{ font-size:12.5px; color: var(--muted); font-weight:500; width:100%; margin-bottom:2px; }
   .chip{
-    font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 8px 14px;
-    background: var(--card-soft); border: 1px solid var(--border); border-radius: 999px;
+    font-family: var(--sans); font-size: 12.5px; font-weight: 500; padding: 7px 12px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 999px;
     color: var(--ink); cursor:pointer; transition: all .12s;
   }
   .chip:hover{ border-color: var(--blue); }
   .chip.active{ background: var(--black); border-color: var(--black); color:#fff; }
 
-  .controls{ padding: 18px 18px 18px; }
+  .controls{ padding: 18px 18px 0; }
   .field{ margin-bottom: 0; }
   .field-label{
     font-size: 13px; font-weight:600; display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;
   }
   .field-label b{ color: var(--blue); font-weight:700; font-variant-numeric: tabular-nums; }
 
-  .dims-row{ display:flex; align-items:center; gap: 10px; }
+  .dims-row{ display:flex; align-items:center; gap: 8px; }
   .dims-row input[type=number]{
-    width: 90px; background: var(--card-soft); border: 1.5px solid var(--border); border-radius: 10px;
-    font-family: var(--sans); font-weight:600; font-size: 14px; padding: 10px 8px; color: var(--ink);
+    width: 78px; background: var(--card); border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: var(--sans); font-weight:600; font-size: 14px; padding: 10px 6px; color: var(--ink);
     text-align:center; font-variant-numeric: tabular-nums;
   }
   .dims-row input[type=number]:focus{ outline:none; border-color: var(--blue); }
   .dims-x{ color: var(--muted-2); font-weight:500; }
   .lock-btn{
-    margin-left:auto; width: 38px; height: 38px; border-radius: 10px; background: var(--card-soft);
+    margin-left:auto; width: 38px; height: 38px; border-radius: 10px; background: var(--card);
     border: 1.5px solid var(--border); cursor:pointer; display:flex; align-items:center; justify-content:center; color: var(--muted);
+    flex-shrink: 0;
   }
   .lock-btn svg{ width:16px; height:16px; stroke: currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
   .lock-btn.active{ border-color: var(--blue); background: var(--blue-bg); color: var(--blue); }
@@ -223,67 +241,76 @@
   .format-row{ display:flex; gap: 8px; padding: 18px 18px 0; }
   .format-block .field-label{ padding: 0 18px; }
   .format-btn{
-    flex:1; padding: 11px; background: var(--card-soft); border: 1.5px solid var(--border); border-radius: 10px;
-    color: var(--ink); font-family: var(--sans); font-weight:600; font-size: 13px; cursor:pointer; transition: all .12s;
+    flex:1; padding: 10px 6px; background: var(--card); border: 1.5px solid var(--border); border-radius: 10px;
+    color: var(--ink); font-family: var(--sans); font-weight:600; font-size: 12.5px; cursor:pointer; transition: all .12s;
   }
   .format-btn.active{ border-color: var(--black); background: var(--black); color: #fff; }
 
   .meter{ margin: 22px 18px 0; }
   .meter-top{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 9px; }
   .meter-top .mlabel{ font-size:13px; font-weight:600; color: var(--muted); }
-  .meter-top .mval{ font-family: var(--display); font-size: 24px; font-weight: 700; color: var(--green); }
+  .meter-top .mval{ font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--green); }
   .meter-top .mval.worse{ color: var(--pink); }
   .meter-bar{ height: 10px; border-radius: 999px; background: var(--border); overflow:hidden; }
   .meter-fill{ height:100%; border-radius:999px; background: var(--green); width:0%; transition: width .35s ease, background .2s; }
-  .sizes{ display:flex; justify-content:space-between; font-size: 12.5px; margin-top: 10px; color: var(--muted); }
+  .sizes{ display:flex; justify-content:space-between; font-size: 12px; margin-top: 10px; color: var(--muted); }
   .sizes b{ color: var(--ink); font-weight:600; font-variant-numeric: tabular-nums; }
   .sizes .arrow{ color: var(--blue); }
 
   .actions{ display:flex; gap: 10px; padding: 20px 18px 4px; }
   button.primary{
     flex:1; background: var(--black); color:#fff; border:none; border-radius: 12px;
-    padding: 15px; font-family: var(--sans); font-weight: 700; font-size: 15px; cursor:pointer;
+    padding: 14px; font-family: var(--sans); font-weight: 700; font-size: 14.5px; cursor:pointer;
     transition: background .15s;
   }
   button.primary:hover{ background: var(--black-hover); }
   button.primary:disabled{ opacity:0.35; cursor:not-allowed; }
   button.ghost{
-    background: var(--card-soft); border: 1.5px solid var(--border); color: var(--ink);
-    padding: 15px 18px; border-radius: 12px; font-family: var(--sans); font-weight:600; font-size: 13.5px; cursor:pointer;
+    background: var(--card); border: 1.5px solid var(--border); color: var(--ink);
+    padding: 14px 16px; border-radius: 12px; font-family: var(--sans); font-weight:600; font-size: 13px; cursor:pointer;
   }
   button.ghost:hover{ border-color: var(--muted-2); }
 
   canvas{ display:none; }
 
+  /* Responsive: stack on narrower screens */
+  @media (max-width: 900px){
+    .panel.show{ display:block; }
+    .controlsPane{ border-left:none; border-top: 1px solid var(--border); margin-top: 14px; border-radius: 14px; }
+    .stage img{ max-height: 420px; }
+  }
+
   /* Content */
-  .content{ margin-top: 64px; }
-  .content h2{ font-family: var(--display); font-size: 23px; font-weight: 800; margin-bottom: 14px; }
-  .content p{ color: var(--muted); font-size: 14.5px; line-height: 1.75; margin-bottom: 14px; max-width: 64ch; }
-  .content section{ margin-bottom: 34px; }
+  .content{ margin-top: 68px; }
+  .content-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+  .content h2{ font-family: var(--display); font-size: 22px; font-weight: 800; margin-bottom: 14px; }
+  .content p{ color: var(--muted); font-size: 14.5px; line-height: 1.75; margin-bottom: 14px; }
   .content ul{ color: var(--muted); font-size: 14.5px; line-height: 1.9; padding-left: 20px; margin-bottom: 14px; }
   .content ul li::marker{ color: var(--blue); }
 
+  .faq-title{ margin-bottom: 18px; }
+  .faq-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   details{
     background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 16px 18px; margin-bottom: 10px;
+    padding: 16px 18px; align-self: start;
   }
   summary{
-    font-weight:600; font-size: 15px; cursor:pointer; list-style:none;
-    display:flex; justify-content:space-between; align-items:center;
+    font-weight:600; font-size: 14.5px; cursor:pointer; list-style:none;
+    display:flex; justify-content:space-between; align-items:center; gap: 10px;
   }
   summary::-webkit-details-marker{ display:none; }
-  summary::after{ content:"+"; color: var(--blue); font-size: 20px; font-weight:400; }
+  summary::after{ content:"+"; color: var(--blue); font-size: 20px; font-weight:400; flex-shrink:0; }
   details[open] summary::after{ content:"−"; }
-  details p{ margin-top: 11px; margin-bottom:0; }
+  details p{ margin-top: 11px; margin-bottom:0; font-size: 13.5px; }
 
-  footer{ margin-top: 50px; text-align:center; color: var(--muted-2); font-size: 12.5px; }
+  @media (max-width: 760px){
+    .content-grid{ grid-template-columns: 1fr; gap: 32px; }
+    .faq-grid{ grid-template-columns: 1fr; }
+  }
+
+  footer{ margin-top: 54px; text-align:center; color: var(--muted-2); font-size: 12.5px; }
 
   :focus-visible{ outline: 2px solid var(--blue); outline-offset: 2px; }
-
-  @media (max-width: 480px){
-    .dims-row input[type=number]{ width: 72px; }
-    .actions{ flex-direction: column; }
-  }
 </style>
 
 <script type="application/ld+json">
@@ -358,7 +385,7 @@
       <p class="sub" id="heroSub">Réduisez le poids d'un JPG, PNG ou WebP sans toucher à ses dimensions. Gratuit, illimité, sans upload.</p>
     </div>
 
-    <main class="toolcard" id="toolcard">
+    <main class="toolcard" id="toolcard" data-mode="compress">
       <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choisir une image à traiter">
         <div class="dzicon"><svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-5 5M12 4l5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
         <strong>Déposez une image ici</strong>
@@ -367,56 +394,14 @@
       </div>
 
       <div class="panel" id="panel">
-        <div class="filebar">
-          <span class="fname" id="fileName">—</span>
-          <span class="fdim" id="fileDim">—</span>
-        </div>
-
-        <!-- COMPRESS MODE -->
-        <div class="mode-block active" id="compress-section" data-mode="compress">
-          <div class="mode-title compress"><span class="midot green"></span>Compression</div>
-          <p class="mode-caption">Réduit le poids du fichier, garde les dimensions d'origine.</p>
-          <div class="controls">
-            <div class="field">
-              <div class="field-label">Qualité <b id="qualityVal">75%</b></div>
-              <input type="range" id="quality" min="10" max="100" value="75">
-            </div>
+        <!-- LEFT: preview -->
+        <div class="previewPane">
+          <div class="filebar">
+            <span class="fname" id="fileName">—</span>
+            <span class="fdim" id="fileDim">—</span>
           </div>
-        </div>
-
-        <!-- RESIZE MODE -->
-        <div class="mode-block" id="resize-section" data-mode="resize">
-          <div class="mode-title"><span class="midot blue"></span>Redimensionnement</div>
-          <p class="mode-caption">Change les dimensions en pixels, sans toucher au cadrage.</p>
-          <div class="chiprow">
-            <span class="row-label">Formats rapides</span>
-            <button class="chip" data-preset="1080,1080,1">Post carré</button>
-            <button class="chip" data-preset="1080,1920,0.5625">Story</button>
-            <button class="chip" data-preset="1280,720,1.7778">Miniature YT</button>
-            <button class="chip" data-preset="1584,396,4">Bannière LinkedIn</button>
-            <button class="chip" data-preset="512,512,1">Avatar</button>
-          </div>
-          <div class="controls">
-            <div class="field">
-              <div class="field-label"><span>Dimensions de sortie</span><b>px</b></div>
-              <div class="dims-row">
-                <input type="number" id="widthInput" min="1" max="8000">
-                <span class="dims-x">×</span>
-                <input type="number" id="heightInput" min="1" max="8000">
-                <button class="lock-btn active" id="lockBtn" title="Verrouiller les proportions" aria-label="Verrouiller les proportions">
-                  <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CROP MODE -->
-        <div class="mode-block" id="crop-section" data-mode="crop">
-          <div class="mode-title"><span class="midot pink"></span>Recadrage</div>
-          <p class="mode-caption">Choisissez la zone à garder, l'image est exportée à la taille du cadre.</p>
           <div class="stage" id="stage">
-            <img id="previewImg" alt="Aperçu de l'image à recadrer">
+            <img id="previewImg" alt="Aperçu de l'image">
             <div class="cropwin" id="cropwin">
               <div class="handle tl" data-corner="tl"></div>
               <div class="handle tr" data-corner="tr"></div>
@@ -424,8 +409,12 @@
               <div class="handle br" data-corner="br"></div>
             </div>
           </div>
-          <div class="chiprow">
-            <span class="row-label">Ratio</span>
+          <div class="exportInfo">
+            <span>Aperçu de l'export</span>
+            <span>Sortie : <b id="exportDims">—</b></span>
+          </div>
+          <div class="previewChiprow" id="cropChips">
+            <span class="row-label">Ratio de recadrage</span>
             <button class="chip active" data-ratio="0">Libre</button>
             <button class="chip" data-ratio="1">1:1</button>
             <button class="chip" data-ratio="0.8">4:5</button>
@@ -434,31 +423,76 @@
           </div>
         </div>
 
-        <div class="format-block">
-          <div class="field-label" style="padding:20px 18px 0;">Format de sortie</div>
-          <div class="format-row">
-            <button class="format-btn active" data-format="image/jpeg">JPEG</button>
-            <button class="format-btn" data-format="image/webp">WEBP</button>
-            <button class="format-btn" data-format="image/png">PNG</button>
+        <!-- RIGHT: controls -->
+        <div class="controlsPane">
+          <div class="mode-block active" data-mode="compress">
+            <div class="mode-title"><span class="midot green"></span>Compression</div>
+            <p class="mode-caption">Réduit le poids, dimensions inchangées.</p>
+            <div class="controls">
+              <div class="field">
+                <div class="field-label">Qualité <b id="qualityVal">75%</b></div>
+                <input type="range" id="quality" min="10" max="100" value="75">
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="meter">
-          <div class="meter-top">
-            <span class="mlabel">Poids du fichier</span>
-            <span class="mval" id="meterVal">0%</span>
+          <div class="mode-block" data-mode="resize">
+            <div class="mode-title"><span class="midot blue"></span>Redimensionnement</div>
+            <p class="mode-caption">Change les dimensions, sans toucher au cadrage.</p>
+            <div class="chiprow">
+              <span class="row-label">Formats rapides</span>
+              <button class="chip" data-preset="1080,1080,1">Post carré</button>
+              <button class="chip" data-preset="1080,1920,0.5625">Story</button>
+              <button class="chip" data-preset="1280,720,1.7778">Miniature YT</button>
+              <button class="chip" data-preset="1584,396,4">Bannière LinkedIn</button>
+              <button class="chip" data-preset="512,512,1">Avatar</button>
+            </div>
+            <div class="controls">
+              <div class="field">
+                <div class="field-label"><span>Dimensions</span><b>px</b></div>
+                <div class="dims-row">
+                  <input type="number" id="widthInput" min="1" max="8000">
+                  <span class="dims-x">×</span>
+                  <input type="number" id="heightInput" min="1" max="8000">
+                  <button class="lock-btn active" id="lockBtn" title="Verrouiller les proportions" aria-label="Verrouiller les proportions">
+                    <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div>
-          <div class="sizes">
-            <span>Original <b id="sizeOrig">—</b></span>
-            <span class="arrow">→</span>
-            <span>Sortie <b id="sizeNew">—</b></span>
-          </div>
-        </div>
 
-        <div class="actions">
-          <button class="primary" id="downloadBtn" disabled>Télécharger</button>
-          <button class="ghost" id="resetBtn">Recommencer</button>
+          <div class="mode-block" data-mode="crop">
+            <div class="mode-title"><span class="midot pink"></span>Recadrage</div>
+            <p class="mode-caption">Glissez le cadre sur l'aperçu à gauche, ou tirez ses coins.</p>
+          </div>
+
+          <div class="format-block">
+            <div class="field-label" style="padding:18px 18px 0;">Format de sortie</div>
+            <div class="format-row">
+              <button class="format-btn active" data-format="image/jpeg">JPEG</button>
+              <button class="format-btn" data-format="image/webp">WEBP</button>
+              <button class="format-btn" data-format="image/png">PNG</button>
+            </div>
+          </div>
+
+          <div class="meter">
+            <div class="meter-top">
+              <span class="mlabel">Poids du fichier</span>
+              <span class="mval" id="meterVal">0%</span>
+            </div>
+            <div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div>
+            <div class="sizes">
+              <span>Original <b id="sizeOrig">—</b></span>
+              <span class="arrow">→</span>
+              <span>Sortie <b id="sizeNew">—</b></span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="downloadBtn" disabled>Télécharger</button>
+            <button class="ghost" id="resetBtn">Recommencer</button>
+          </div>
         </div>
       </div>
 
@@ -466,43 +500,51 @@
     </main>
 
     <div class="content">
-      <section>
-        <h2>Trois outils séparés, un seul traitement à la fois</h2>
-        <p>Contrairement à un éditeur qui combine tout en même temps, chaque outil ici fait une seule chose, clairement : vous savez exactement ce que vous appliquez à votre image.</p>
-        <ul>
-          <li><strong>Compression :</strong> réduit le poids sans upload, dimensions inchangées</li>
-          <li><strong>Redimensionnement :</strong> impose une largeur et une hauteur précises, en pixels</li>
-          <li><strong>Recadrage :</strong> choisit la zone exacte à garder, sans changer la qualité</li>
-        </ul>
-      </section>
+      <div class="content-grid">
+        <section>
+          <h2>Trois outils séparés, un seul traitement à la fois</h2>
+          <p>Contrairement à un éditeur qui combine tout en même temps, chaque outil ici fait une seule chose, clairement : vous savez exactement ce que vous appliquez à votre image.</p>
+          <ul>
+            <li><strong>Compression :</strong> réduit le poids, dimensions inchangées</li>
+            <li><strong>Redimensionnement :</strong> largeur et hauteur précises, en pixels</li>
+            <li><strong>Recadrage :</strong> zone exacte à garder, sans changer la qualité</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Comment ça fonctionne</h2>
+          <p>Tout repose sur l'API Canvas de votre navigateur : l'image est dessinée puis réencodée localement, sans jamais transiter par un serveur. C'est à la fois plus rapide et plus confidentiel que les outils qui uploadent vos fichiers ailleurs.</p>
+          <p>Basculez d'un outil à l'autre via le menu en haut de page — chaque outil garde son propre réglage.</p>
+        </section>
+      </div>
 
       <section>
-        <h2>Comment ça fonctionne</h2>
-        <p>Tout repose sur l'API Canvas de votre navigateur : l'image est dessinée puis réencodée localement, sans jamais transiter par un serveur. C'est à la fois plus rapide et plus confidentiel que les outils qui uploadent vos fichiers ailleurs.</p>
-      </section>
-
-      <section>
-        <h2>Questions fréquentes</h2>
-        <details>
-          <summary>Pourquoi les trois outils sont-ils séparés ?</summary>
-          <p>Pour rester simple : chaque outil applique un seul traitement à la fois, sans réglages cachés qui s'additionnent. Basculez d'un outil à l'autre via le menu en haut.</p>
-        </details>
-        <details>
-          <summary>Comment recadrer une image en ligne ?</summary>
-          <p>Ouvrez l'outil Recadrage, puis faites glisser le cadre rose directement sur l'aperçu, ou tirez ses coins. Les puces "Ratio" appliquent une forme fixe automatiquement centrée.</p>
-        </details>
-        <details>
-          <summary>Comment redimensionner une image sans la déformer ?</summary>
-          <p>Dans l'outil Redimensionnement, laissez le cadenas activé : la proportion d'origine est conservée automatiquement quand vous changez la largeur ou la hauteur.</p>
-        </details>
-        <details>
-          <summary>Quel format choisir : JPG, PNG ou WebP ?</summary>
-          <p>JPG pour les photos, PNG pour la transparence et les contours nets, WebP pour le meilleur compromis poids/qualité si votre usage le permet.</p>
-        </details>
-        <details>
-          <summary>Y a-t-il une limite de fichiers ou faut-il créer un compte ?</summary>
-          <p>Non, les trois outils sont entièrement gratuits, sans inscription et sans limite de nombre d'utilisations.</p>
-        </details>
+        <h2 class="faq-title">Questions fréquentes</h2>
+        <div class="faq-grid">
+          <details>
+            <summary>Pourquoi les trois outils sont-ils séparés ?</summary>
+            <p>Pour rester simple : chaque outil applique un seul traitement à la fois, sans réglages cachés qui s'additionnent.</p>
+          </details>
+          <details>
+            <summary>Comment recadrer une image en ligne ?</summary>
+            <p>Ouvrez l'outil Recadrage, puis faites glisser le cadre rose directement sur l'aperçu, ou tirez ses coins.</p>
+          </details>
+          <details>
+            <summary>Comment redimensionner sans déformer ?</summary>
+            <p>Laissez le cadenas activé : la proportion d'origine est conservée automatiquement.</p>
+          </details>
+          <details>
+            <summary>Quel format choisir ?</summary>
+            <p>JPG pour les photos, PNG pour la transparence, WebP pour le meilleur compromis poids/qualité.</p>
+          </details>
+          <details>
+            <summary>Mes images sont-elles envoyées sur un serveur ?</summary>
+            <p>Non. Tout est traité localement via l'API Canvas du navigateur.</p>
+          </details>
+          <details>
+            <summary>Y a-t-il une limite d'utilisation ?</summary>
+            <p>Non, c'est gratuit, illimité et sans inscription.</p>
+          </details>
+        </div>
       </section>
     </div>
 
@@ -516,9 +558,10 @@
   const panel = document.getElementById('panel');
   const fileNameEl = document.getElementById('fileName');
   const fileDimEl = document.getElementById('fileDim');
-  const stage = document.getElementById('stage');
   const previewImg = document.getElementById('previewImg');
   const cropwin = document.getElementById('cropwin');
+  const cropChips = document.getElementById('cropChips');
+  const exportDims = document.getElementById('exportDims');
   const widthInput = document.getElementById('widthInput');
   const heightInput = document.getElementById('heightInput');
   const lockBtn = document.getElementById('lockBtn');
@@ -560,14 +603,14 @@
     }
   };
 
-  const HQ = 0.92; // qualité fixe pour redimensionnement / recadrage (pas de perte visible)
+  const HQ = 0.92;
   let mode = 'compress';
   let img = null;
   let file = null;
   let naturalW = 0, naturalH = 0;
-  let crop = null;              // rect utilisé par le mode Recadrage
+  let crop = null;
   let activeRatio = 0;
-  let resizeSourceRect = null;  // rect centré auto-calculé quand un preset de resize est choisi
+  let resizeSourceRect = null;
   let scale = 1;
   let selectedFormat = 'image/jpeg';
   let currentBlob = null;
@@ -592,14 +635,15 @@
     heroSub.textContent = info.sub;
     modeBlocks.forEach(b => b.classList.toggle('active', b.dataset.mode === m));
     navLinks.forEach(a => a.classList.toggle('active', a.dataset.mode === m));
+    toolcard.dataset.mode = m;
+    cropChips.style.display = (m === 'crop') ? 'flex' : 'none';
   }
 
   function setMode(m, opts){
     opts = opts || {};
     if(mode === m && !opts.force) return;
-    const isFirstLoad = opts.firstLoad === true;
 
-    if(isFirstLoad){
+    if(opts.firstLoad){
       mode = m;
       applyModeUI(m);
       return;
@@ -628,8 +672,8 @@
       const wasVisible = panel.classList.contains('show');
       setMode(m);
       window.setTimeout(() => {
-        const target = wasVisible ? document.getElementById(a.getAttribute('href').slice(1)) : dropzone;
-        if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if(!wasVisible) dropzone.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        else toolcard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 160);
     });
   });
@@ -639,7 +683,6 @@
     if(MODE_INFO[m]) setMode(m, { pushHistory: false });
   });
 
-  // Initial mode from URL hash (deep link / back-forward)
   (function initMode(){
     const m = (location.hash || '').slice(1);
     setMode(MODE_INFO[m] ? m : 'compress', { firstLoad: true });
@@ -669,7 +712,8 @@
       heightInput.value = naturalH;
 
       requestAnimationFrame(() => {
-        if(mode === 'crop'){ computeScale(); renderCropwin(); }
+        computeScale();
+        renderCropwin();
         doExport();
       });
     };
@@ -707,6 +751,7 @@
   // ---------- Crop mode: drag / resize ----------
   function pointerPos(e){ return { x: e.clientX, y: e.clientY }; }
   cropwin.addEventListener('pointerdown', (e) => {
+    if(mode !== 'crop') return;
     dragMode = e.target.dataset.corner || 'move';
     dragStart = pointerPos(e);
     cropStart = { ...crop };
@@ -750,7 +795,7 @@
     doExport();
   }));
   window.addEventListener('resize', () => {
-    if(!img || mode !== 'crop') return;
+    if(!img) return;
     computeScale();
     renderCropwin();
   });
@@ -804,7 +849,7 @@
     });
   });
 
-  // ---------- Export (behaviour depends on active mode only) ----------
+  // ---------- Export ----------
   function doExport(){
     if(!img) return;
     let sx, sy, sw, sh, outW, outH, quality;
@@ -819,7 +864,7 @@
       outW = clamp(parseInt(widthInput.value) || naturalW, 1, 8000);
       outH = clamp(parseInt(heightInput.value) || naturalH, 1, 8000);
       quality = HQ;
-    } else { // compress
+    } else {
       sx = 0; sy = 0; sw = naturalW; sh = naturalH;
       outW = naturalW; outH = naturalH;
       quality = qualitySlider.value / 100;
@@ -829,6 +874,7 @@
     canvas.height = outH;
     ctx.clearRect(0, 0, outW, outH);
     ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+    exportDims.textContent = `${outW}×${outH}px`;
     canvas.toBlob((blob) => {
       if(!blob) return;
       currentBlob = blob;
