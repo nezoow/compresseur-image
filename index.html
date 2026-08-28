@@ -76,10 +76,16 @@
   .toolnav a{
     display:flex; align-items:center; gap: 7px; text-decoration:none; color: var(--ink);
     font-size: 13.5px; font-weight: 600; padding: 9px 13px; border-radius: 10px; transition: background .15s;
-    border: 1px solid transparent;
+    border: 1px solid transparent; position: relative;
   }
   .toolnav a:hover{ background: var(--card); }
   .toolnav a.active{ background: var(--card); border-color: var(--border); box-shadow: 0 1px 3px rgba(19,21,28,0.05); }
+  .toolnav a.active::after{
+    content:""; position:absolute; left:13px; right:13px; bottom:-1px; height:2px; border-radius:2px;
+  }
+  .toolnav a.active[data-mode="compress"]::after{ background: var(--green); }
+  .toolnav a.active[data-mode="resize"]::after{ background: var(--blue); }
+  .toolnav a.active[data-mode="crop"]::after{ background: var(--pink); }
   .toolnav a .dot{ width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
   .toolnav a .dot.green{ background: var(--green); }
   .toolnav a .dot.blue{ background: var(--blue); }
@@ -96,10 +102,11 @@
   .brand-name{ font-family: var(--display); font-weight:700; font-size: 17px; }
 
   /* Hero */
-  .hero{ text-align:center; padding: 46px 0 30px; }
+  .hero{ text-align:center; padding: 46px 0 30px; transition: opacity .16s ease, transform .16s ease; }
+  .hero.fading, .toolcard.fading{ opacity:0; transform: translateY(6px); }
   h1{
     font-family: var(--display); font-weight: 800; font-size: clamp(32px, 5.2vw, 46px);
-    line-height: 1.14; letter-spacing: -0.01em; color: var(--ink); max-width: 16ch; margin: 0 auto;
+    line-height: 1.14; letter-spacing: -0.01em; color: var(--ink); max-width: 18ch; margin: 0 auto;
   }
   .sub{
     color: var(--muted); font-size: 16px; margin-top: 16px; max-width: 46ch;
@@ -109,7 +116,7 @@
   /* Tool card */
   .toolcard{
     background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
-    padding: 10px; margin-top: 8px;
+    padding: 10px; margin-top: 8px; transition: opacity .16s ease, transform .16s ease;
   }
 
   .dropzone{
@@ -346,12 +353,12 @@
   </div>
 
   <div class="wrap">
-    <div class="hero">
-      <h1>Compressez, redimensionnez ou recadrez vos images</h1>
-      <p class="sub">Trois outils séparés, gratuits et illimités — un seul traitement à la fois, rien n'est envoyé sur un serveur.</p>
+    <div class="hero" id="hero">
+      <h1 id="heroTitle">Compressez vos images</h1>
+      <p class="sub" id="heroSub">Réduisez le poids d'un JPG, PNG ou WebP sans toucher à ses dimensions. Gratuit, illimité, sans upload.</p>
     </div>
 
-    <main class="toolcard">
+    <main class="toolcard" id="toolcard">
       <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choisir une image à traiter">
         <div class="dzicon"><svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-5 5M12 4l5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
         <strong>Déposez une image ici</strong>
@@ -530,6 +537,28 @@
   const presetChips = document.querySelectorAll('[data-preset]');
   const navLinks = document.querySelectorAll('.toolnav a');
   const modeBlocks = document.querySelectorAll('.mode-block');
+  const hero = document.getElementById('hero');
+  const heroTitle = document.getElementById('heroTitle');
+  const heroSub = document.getElementById('heroSub');
+  const toolcard = document.getElementById('toolcard');
+
+  const MODE_INFO = {
+    compress: {
+      pageTitle: "Compresser une image en ligne gratuit — imageatelier",
+      h1: "Compressez vos images",
+      sub: "Réduisez le poids d'un JPG, PNG ou WebP sans toucher à ses dimensions. Gratuit, illimité, sans upload."
+    },
+    resize: {
+      pageTitle: "Redimensionner une image en ligne gratuit — imageatelier",
+      h1: "Redimensionnez vos images",
+      sub: "Fixez une largeur et une hauteur précises, en pixels, sans changer le cadrage. Gratuit, illimité, sans upload."
+    },
+    crop: {
+      pageTitle: "Recadrer une image en ligne gratuit — imageatelier",
+      h1: "Recadrez vos images",
+      sub: "Choisissez la zone exacte à garder, avec des ratios prêts à l'emploi. Gratuit, illimité, sans upload."
+    }
+  };
 
   const HQ = 0.92; // qualité fixe pour redimensionnement / recadrage (pas de perte visible)
   let mode = 'compress';
@@ -556,25 +585,65 @@
   function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
 
   // ---------- Mode switching ----------
-  function setMode(m){
-    mode = m;
+  function applyModeUI(m){
+    const info = MODE_INFO[m];
+    document.title = info.pageTitle;
+    heroTitle.textContent = info.h1;
+    heroSub.textContent = info.sub;
     modeBlocks.forEach(b => b.classList.toggle('active', b.dataset.mode === m));
     navLinks.forEach(a => a.classList.toggle('active', a.dataset.mode === m));
-    if(m === 'crop' && img){
-      requestAnimationFrame(() => { computeScale(); renderCropwin(); });
+  }
+
+  function setMode(m, opts){
+    opts = opts || {};
+    if(mode === m && !opts.force) return;
+    const isFirstLoad = opts.firstLoad === true;
+
+    if(isFirstLoad){
+      mode = m;
+      applyModeUI(m);
+      return;
     }
-    if(img) doExport();
+
+    hero.classList.add('fading');
+    toolcard.classList.add('fading');
+
+    window.setTimeout(() => {
+      mode = m;
+      applyModeUI(m);
+      if(opts.pushHistory !== false){
+        history.pushState({ mode: m }, '', '#' + m);
+      }
+      hero.classList.remove('fading');
+      toolcard.classList.remove('fading');
+      if(m === 'crop' && img){ requestAnimationFrame(() => { computeScale(); renderCropwin(); }); }
+      if(img) doExport();
+    }, 150);
   }
 
   navLinks.forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const m = a.dataset.mode;
+      const wasVisible = panel.classList.contains('show');
       setMode(m);
-      const target = panel.classList.contains('show') ? document.getElementById(a.getAttribute('href').slice(1)) : dropzone;
-      if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.setTimeout(() => {
+        const target = wasVisible ? document.getElementById(a.getAttribute('href').slice(1)) : dropzone;
+        if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 160);
     });
   });
+
+  window.addEventListener('popstate', () => {
+    const m = (location.hash || '#compress').slice(1);
+    if(MODE_INFO[m]) setMode(m, { pushHistory: false });
+  });
+
+  // Initial mode from URL hash (deep link / back-forward)
+  (function initMode(){
+    const m = (location.hash || '').slice(1);
+    setMode(MODE_INFO[m] ? m : 'compress', { firstLoad: true });
+  })();
 
   // ---------- File loading ----------
   function openFile(f){
